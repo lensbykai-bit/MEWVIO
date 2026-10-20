@@ -25,7 +25,7 @@ class MewvioApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
-          scaffoldBackgroundColor: pale,
+          scaffoldBackgroundColor: const Color(0xFFFAF8FF),
           colorScheme: ColorScheme.fromSeed(seedColor: purple),
           textTheme: const TextTheme(
             headlineSmall: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: dark),
@@ -66,7 +66,7 @@ class _MainShellState extends State<MainShell> {
       const ProfilePage(),
     ];
     return Scaffold(
-      body: SafeArea(child: IndexedStack(index: selected, children: pages)),
+      body: SafeArea(child: pages[selected]),
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
