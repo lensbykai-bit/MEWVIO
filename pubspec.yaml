@@ -1,7 +1,7 @@
 name: mewvio
 description: MEWVIO - social community mobile application (Stage 1 demo)
 publish_to: none
-version: 0.1.0+1
+version: 0.1.1+2
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -16,8 +16,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/mewvio-cat.svg
+
+flutter_launcher_icons:
+  android: true
+  image_path: assets/images/app_icon.png
+  adaptive_icon_background: '#6338D8'
+  adaptive_icon_foreground: assets/images/app_icon.png
