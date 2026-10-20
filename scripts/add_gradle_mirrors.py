@@ -16,6 +16,7 @@ flutter_root = Path(os.environ["FLUTTER_ROOT"])
 targets = [
     Path("android/settings.gradle.kts"),
     Path("android/build.gradle.kts"),
+    flutter_root / "packages/flutter_tools/gradle/settings.gradle.kts",
     flutter_root / "packages/flutter_tools/gradle/build.gradle.kts",
 ]
 for file in targets:
@@ -23,7 +24,8 @@ for file in targets:
         raise SystemExit(f"Required gradle file missing: {file}")
     text = file.read_text()
     if "repositories {" not in text:
-        raise SystemExit(f"Could not locate Gradle repositories: {file}")
+        print("No repositories block found, skipping:", file)
+        continue
     text = text.replace("repositories {", "repositories {" + mirror_lines, 1)
     file.write_text(text)
     print("Added mirror repositories:", file)
