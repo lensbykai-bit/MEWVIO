@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'tiktok_video_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
 
@@ -59,19 +60,20 @@ class _MainShellState extends State<MainShell> {
   Widget build(BuildContext context) {
     final pages = [
       HomePage(openTab: (index) => setState(() => selected = index)),
-      const VideosPage(),
+      const TikTokVideosPage(),
       const MatchPage(),
       const ChatPage(),
       const PartyPage(),
       const ProfilePage(),
     ];
     return Scaffold(
-      body: SafeArea(child: pages[selected]),
+      backgroundColor: selected == 1 ? Colors.black : pale,
+      body: selected == 1 ? pages[selected] : SafeArea(child: pages[selected]),
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: selected == 1 ? Colors.black : Colors.white,
             boxShadow: [BoxShadow(color: Color(0x18000000), blurRadius: 15)],
           ),
           padding: const EdgeInsets.symmetric(vertical: 7),
@@ -83,11 +85,11 @@ class _MainShellState extends State<MainShell> {
                   borderRadius: BorderRadius.circular(14),
                   onTap: () => setState(() => selected = index),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(tabs[index].$2, size: 23, color: active ? purple : Colors.blueGrey.shade300),
+                    Icon(tabs[index].$2, size: 23, color: selected == 1 ? (active ? Colors.white : Colors.white54) : (active ? purple : Colors.blueGrey.shade300)),
                     const SizedBox(height: 4),
                     Text(tabs[index].$1, style: TextStyle(
                       fontSize: 10, fontWeight: active ? FontWeight.bold : FontWeight.normal,
-                      color: active ? purple : Colors.blueGrey.shade400,
+                      color: selected == 1 ? (active ? Colors.white : Colors.white54) : (active ? purple : Colors.blueGrey.shade400),
                     )),
                   ]),
                 ),
