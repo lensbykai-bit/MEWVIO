@@ -33,6 +33,9 @@ jobs:
       - name: Create Android project files
         run: flutter create --platforms=android --project-name mewvio .
 
+      - name: Configure alternative Gradle repositories
+        run: python3 scripts/add_gradle_mirrors.py
+
       - name: Resolve dependencies
         run: flutter pub get
 
