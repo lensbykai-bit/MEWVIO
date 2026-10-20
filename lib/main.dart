@@ -72,9 +72,9 @@ class _MainShellState extends State<MainShell> {
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: selected == 1 ? Colors.black : Colors.white,
-            boxShadow: [BoxShadow(color: Color(0x18000000), blurRadius: 15)],
+            boxShadow: const [BoxShadow(color: Color(0x18000000), blurRadius: 15)],
           ),
           padding: const EdgeInsets.symmetric(vertical: 7),
           child: Row(
