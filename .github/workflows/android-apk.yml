@@ -36,8 +36,28 @@ jobs:
       - name: Configure alternative Gradle repositories
         run: python3 scripts/add_gradle_mirrors.py
 
+      - name: Restore approved MEWVIO kitten icon
+        run: |
+          base64 --decode branding/android_icon_128.png.base64 > assets/images/app_icon.png
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          data=Path('assets/images/app_icon.png').read_bytes()
+          expected='320e6255adb532b3c5107da09cfc1561589531c5381f9b4a324977bf63046e73'
+          assert data.startswith(bytes.fromhex('89504e470d0a1a0a')), 'Invalid PNG'
+          assert hashlib.sha256(data).hexdigest()==expected, 'Icon checksum mismatch'
+          print('MEWVIO original icon verified')
+          manifest=Path('android/app/src/main/AndroidManifest.xml')
+          txt=manifest.read_text()
+          txt=txt.replace('android:label="mewvio"', 'android:label="MEWVIO"')
+          manifest.write_text(txt)
+          PY
+
       - name: Resolve dependencies
         run: flutter pub get
+
+      - name: Generate Android launcher icons
+        run: dart run flutter_launcher_icons
 
       - name: Analyze app
         run: flutter analyze --no-fatal-infos
@@ -48,7 +68,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: MEWVIO-Android-v0.1-debug-APK
+          name: MEWVIO-Android-v0.1.1-Official-Icon-APK
           path: build/app/outputs/flutter-apk/app-debug.apk
           if-no-files-found: error
           retention-days: 30
