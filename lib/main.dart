@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'tiktok_video_page.dart';
+import 'mewvio_shop_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
 
@@ -53,7 +54,8 @@ class _MainShellState extends State<MainShell> {
     ('Match', Icons.favorite_rounded),
     ('Chat', Icons.chat_bubble_rounded),
     ('Party', Icons.mic_rounded),
-    ('Profile', Icons.person_rounded)
+    ('Profile', Icons.person_rounded),
+    ('Shop', Icons.shopping_bag_rounded)
   ];
 
   @override
@@ -65,6 +67,7 @@ class _MainShellState extends State<MainShell> {
       const ChatPage(),
       const PartyPage(),
       const ProfilePage(),
+      const MewvioShopPage(),
     ];
     return Scaffold(
       backgroundColor: selected == 1 ? Colors.black : pale,
