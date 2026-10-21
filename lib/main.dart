@@ -46,7 +46,7 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  int selected = 0;
+  int selected = 1;
   final tabs = const [
     ('Home', Icons.home_rounded),
     ('Videos', Icons.play_circle_rounded),
