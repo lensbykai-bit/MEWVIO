@@ -610,8 +610,41 @@ class _ProfilePageState extends State<ProfilePage> {
               subtitle: const Text('Demo setting only'),
             ),
           ])),
+          const SizedBox(height: 19),
+          sectionTitle('Safety & Privacy'),
+          cardBox(Column(children: [
+            ListTile(
+              leading: const Icon(Icons.shield_outlined, color: purple),
+              title: const Text('Safety center'),
+              subtitle: const Text('Learn how to stay safer on MEWVIO'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('MEWVIO Safety Center'),
+                  content: const Text('Keep personal information private. Report unwanted behavior and block accounts when those live features are available. This beta does not connect to real people.'),
+                  actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Got it'))],
+                ),
+              ),
+            ),
+            const Divider(height: 2),
+            ListTile(
+              leading: const Icon(Icons.report_outlined, color: purple),
+              title: const Text('Report a problem'),
+              subtitle: const Text('Beta feedback — reporting is not connected yet'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('Report a problem'),
+                  content: const Text('In-app reporting is coming in a future release. This is an offline demo; no report is submitted.'),
+                  actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close'))],
+                ),
+              ),
+            ),
+          ])),
           const SizedBox(height: 22),
-          const Center(child: Text('MEWVIO v0.1 • Stage 1 prototype',
+          const Center(child: Text('MEWVIO v0.1.6 • Stage 1 prototype',
               style: TextStyle(color: Colors.grey, fontSize: 12))),
         ],
       );
