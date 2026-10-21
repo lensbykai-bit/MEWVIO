@@ -69,7 +69,7 @@ jobs:
         run: bash scripts/generate_demo_videos.sh
 
       - name: Resolve dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Save resolved dependency lockfile
         uses: actions/upload-artifact@v4

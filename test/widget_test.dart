@@ -16,6 +16,8 @@ void main() {
     accounts.changeUser('alice');
     await tester.pumpAndSettle();
     expect(find.text('Alice'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Private profile'), 200);
+    await tester.pumpAndSettle();
     expect(find.text('Private profile'), findsOneWidget);
     await tester.pumpWidget(const SizedBox.shrink());
   });
