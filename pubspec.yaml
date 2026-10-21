@@ -1,16 +1,17 @@
 name: mewvio
-description: MEWVIO - social community mobile application (Stage 1 demo)
+description: MEWVIO - social community mobile application (private account beta)
 publish_to: none
-version: 0.1.7+8
+version: 0.1.8+9
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: '>=3.9.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.17
   video_player: ^2.9.5
+  supabase_flutter: 2.18.3
 
 dev_dependencies:
   flutter_test:
