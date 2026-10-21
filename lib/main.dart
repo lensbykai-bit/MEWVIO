@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'tiktok_video_page.dart';
 import 'mewvio_shop_page.dart';
@@ -571,6 +573,16 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int activeTab = 0;
+  File? coverImage;
+  Future<void> chooseCover() async {
+    try {
+      final picked = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 80, maxWidth: 1600);
+      if (picked != null && mounted) setState(() => coverImage = File(picked.path));
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open gallery. Check photo permissions.')));
+    }
+  }
   bool privateProfile = true;
   bool notifications = true;
   String displayName = 'MEWVIO Friend';
@@ -688,16 +700,49 @@ class _ProfilePageState extends State<ProfilePage> {
             icon: const Icon(Icons.menu_rounded, color: dark, size: 29)),
         ]),
       ),
-      const SizedBox(height: 12),
-      Center(child: Container(
-        width: 104, height: 104,
-        padding: const EdgeInsets.all(9),
-        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white,
-          border: Border.all(color: purple, width: 3)),
-        child: SvgPicture.asset(mascot),
-      )),
-      const SizedBox(height: 12),
-      Text(displayName, textAlign: TextAlign.center,
+      const SizedBox(height: 10),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(17),
+          child: SizedBox(
+            height: 175,
+            child: Stack(fit: StackFit.expand, children: [
+              Container(
+                decoration: const BoxDecoration(gradient: LinearGradient(
+                  begin: Alignment.topLeft, end: Alignment.bottomRight,
+                  colors: [Color(0xFF4534A6), Color(0xFF9B56EB), Color(0xFFF48BCB)])),
+              ),
+              if (coverImage != null)
+                Image.file(coverImage!, fit: BoxFit.cover, errorBuilder: (_, __, ___) =>
+                  const Center(child: Icon(Icons.image_not_supported, color: Colors.white))),
+              if (coverImage == null)
+                const Center(child: Text('🐱  MEWVIO  💜',
+                  style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w900))),
+              Positioned(bottom: 11, right: 12, child: FilledButton.icon(
+                onPressed: chooseCover,
+                style: FilledButton.styleFrom(backgroundColor: const Color(0xCC231443),
+                  foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 11)),
+                icon: const Icon(Icons.photo_camera_outlined, size: 17),
+                label: Text(coverImage == null ? 'Add cover' : 'Change cover'),
+              )),
+            ]),
+          ),
+        ),
+      ),
+      const SizedBox(height: 0),
+      Transform.translate(
+        offset: const Offset(0, -21),
+        child: Center(child: Container(
+          width: 104, height: 104,
+          padding: const EdgeInsets.all(9),
+          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white,
+            border: Border.all(color: purple, width: 3)),
+          child: SvgPicture.asset(mascot),
+        )),
+      ),
+      const SizedBox(height: 0),
+      //Text(displayName, textAlign: TextAlign.center,
         style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: dark)),
       const SizedBox(height: 16),
       Row(children: [stat('0', 'Following'), stat('0', 'Followers'), stat('0', 'Likes')]),
@@ -745,7 +790,7 @@ class _ProfilePageState extends State<ProfilePage> {
           )),
       ]),
       emptyPosts(),
-      const Center(child: Text('MEWVIO v0.1.7 • Beta profile', style: TextStyle(color: Colors.grey, fontSize: 11))),
+      const Center(child: Text('MEWVIO v0.1.8 • Beta profile', style: TextStyle(color: Colors.grey, fontSize: 11))),
     ],
   );
 }
