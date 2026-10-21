@@ -34,7 +34,10 @@ jobs:
           cache: true
 
       - name: Create Android project files
-        run: flutter create --no-pub --platforms=android --project-name mewvio .
+        run: |
+          flutter create --no-pub --platforms=android --project-name mewvio .
+          # Flutter create seeds its own SDK lockfile even for an existing app.
+          git restore --source=HEAD -- pubspec.lock
 
       - name: Configure alternative Gradle repositories
         run: python3 scripts/add_gradle_mirrors.py

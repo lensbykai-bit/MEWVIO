@@ -12,6 +12,7 @@ Push commits to `main` or run **Actions → Build MEWVIO Android APK → Run wor
 
 ```bash
 flutter create --no-pub --platforms=android --project-name mewvio .
+git restore --source=HEAD -- pubspec.lock
 python3 scripts/configure_android_network.py
 flutter pub get --enforce-lockfile
 flutter test
