@@ -742,7 +742,7 @@ class _ProfilePageState extends State<ProfilePage> {
         )),
       ),
       const SizedBox(height: 0),
-      //Text(displayName, textAlign: TextAlign.center,
+      Text(displayName, textAlign: TextAlign.center,
         style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: dark)),
       const SizedBox(height: 16),
       Row(children: [stat('0', 'Following'), stat('0', 'Followers'), stat('0', 'Likes')]),
