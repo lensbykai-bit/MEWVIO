@@ -3,6 +3,8 @@ name: Build MEWVIO Android APK
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -28,10 +30,14 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: '3.47.7'
           cache: true
 
       - name: Create Android project files
-        run: flutter create --platforms=android --project-name mewvio .
+        run: |
+          flutter create --no-pub --platforms=android --project-name mewvio .
+          # Flutter create seeds its own SDK lockfile even for an existing app.
+          git restore --source=HEAD -- pubspec.lock
 
       - name: Configure alternative Gradle repositories
         run: python3 scripts/add_gradle_mirrors.py
@@ -56,11 +62,21 @@ jobs:
       - name: Configure fast purple splash
         run: python3 scripts/configure_splash.py
 
+      - name: Enable release APK network access
+        run: python3 scripts/configure_android_network.py
+
       - name: Generate bundled offline video samples
         run: bash scripts/generate_demo_videos.sh
 
       - name: Resolve dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
+
+      - name: Save resolved dependency lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: MEWVIO-dependency-lockfile
+          path: pubspec.lock
+          if-no-files-found: error
 
       - name: Generate Android launcher icons
         run: dart run flutter_launcher_icons
@@ -68,13 +84,16 @@ jobs:
       - name: Analyze app
         run: flutter analyze --no-fatal-infos
 
+      - name: Test account and profile flows
+        run: flutter test
+
       - name: Build APK
         run: flutter build apk --release
 
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: MEWVIO-v0.1.5-Shop-Beta-APK
+          name: MEWVIO-v0.1.9-Accounts-Beta-APK
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 30
