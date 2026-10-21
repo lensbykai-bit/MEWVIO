@@ -2,7 +2,7 @@
 
 MEWVIO is a Flutter Android social app beta with Supabase email/password accounts and private profiles.
 
-Registration, login, session restoration, profile editing and logout connect to Supabase. Profiles are visible only to their owner. Chat, matching, voice rooms, videos and shopping remain demo features.
+Registration, login, session restoration, profile editing and logout connect to Supabase. Profiles are visible only to their owner. The gallery cover-photo picker remains a local preview and does not upload photos. Chat, matching, voice rooms, videos and shopping remain demo features.
 
 ## Build Android APK
 

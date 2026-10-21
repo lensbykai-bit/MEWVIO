@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'account_repository.dart';
 
@@ -251,7 +253,7 @@ class _AuthFormState extends State<_AuthForm> {
           const Text('Profiles are private in this beta. Chat, matching, voice rooms '
               'and shopping remain demo features.', textAlign: TextAlign.center),
           const SizedBox(height: 12),
-          const Text('MEWVIO v0.1.8', textAlign: TextAlign.center,
+          const Text('MEWVIO v0.1.9', textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey, fontSize: 12)),
         ],
       );
@@ -277,6 +279,27 @@ class _ProfileViewState extends State<_ProfileView> {
   bool _busy = false;
   bool _editing = false;
   int _activeTab = 0;
+  File? _coverImage;
+  bool _choosingCover = false;
+
+  Future<void> _chooseCover() async {
+    if (_choosingCover) return;
+    setState(() => _choosingCover = true);
+    try {
+      final picked = await ImagePicker().pickImage(
+        source: ImageSource.gallery, imageQuality: 80, maxWidth: 1600,
+      );
+      if (picked != null && mounted) {
+        setState(() => _coverImage = File(picked.path));
+      }
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open gallery. Check photo permissions.')),
+      );
+    } finally {
+      if (mounted) setState(() => _choosingCover = false);
+    }
+  }
 
   @override
   void initState() {
@@ -400,12 +423,35 @@ class _ProfileViewState extends State<_ProfileView> {
             _Message(text: _error ?? 'Unable to load your profile.', error: true),
             FilledButton(onPressed: _load, child: const Text('Retry')),
           ] else ...[
-            Center(child: Container(
+            ClipRRect(
+              borderRadius: BorderRadius.circular(17),
+              child: SizedBox(height: 175, child: Stack(fit: StackFit.expand, children: [
+                const DecoratedBox(decoration: BoxDecoration(gradient: LinearGradient(
+                  begin: Alignment.topLeft, end: Alignment.bottomRight,
+                  colors: [Color(0xFF4534A6), Color(0xFF9B56EB), Color(0xFFF48BCB)],
+                ))),
+                if (_coverImage != null)
+                  Image.file(_coverImage!, fit: BoxFit.cover, errorBuilder: (_, __, ___) =>
+                    const Center(child: Icon(Icons.image_not_supported, color: Colors.white)))
+                else const Center(child: Text('🐱  MEWVIO  💜',
+                    style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w900))),
+                Positioned(bottom: 11, right: 12, child: FilledButton.icon(
+                  onPressed: _busy || _choosingCover ? null : _chooseCover,
+                  style: FilledButton.styleFrom(backgroundColor: const Color(0xCC231443),
+                      foregroundColor: Colors.white),
+                  icon: const Icon(Icons.photo_camera_outlined, size: 17),
+                  label: Text(_coverImage == null ? 'Add cover' : 'Change cover'),
+                )),
+              ])),
+            ),
+            const Text('Cover preview • not uploaded', textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey, fontSize: 11)),
+            Transform.translate(offset: const Offset(0, -16), child: Center(child: Container(
               width: 104, height: 104, padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white,
                   border: Border.all(color: _purple, width: 3)),
               child: SvgPicture.asset('assets/images/mewvio-cat.svg'),
-            )),
+            ))),
             const SizedBox(height: 12),
             Text(_profile!.displayName, key: const Key('profile-display-name'),
                 textAlign: TextAlign.center,
@@ -504,7 +550,7 @@ class _ProfileViewState extends State<_ProfileView> {
             icon: const Icon(Icons.logout), label: const Text('Sign out'),
           ),
           const SizedBox(height: 12),
-          const Text('Chat, matching, voice rooms and shopping are demo features.\nMEWVIO v0.1.8',
+          const Text('Chat, matching, voice rooms and shopping are demo features.\nMEWVIO v0.1.9',
               textAlign: TextAlign.center, style: TextStyle(color: Colors.grey, fontSize: 12)),
         ],
       );
