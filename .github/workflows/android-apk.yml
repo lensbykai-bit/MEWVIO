@@ -30,10 +30,11 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: '3.47.7'
           cache: true
 
       - name: Create Android project files
-        run: flutter create --platforms=android --project-name mewvio .
+        run: flutter create --no-pub --platforms=android --project-name mewvio .
 
       - name: Configure alternative Gradle repositories
         run: python3 scripts/add_gradle_mirrors.py

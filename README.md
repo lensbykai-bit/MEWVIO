@@ -11,7 +11,7 @@ Push commits to `main` or run **Actions → Build MEWVIO Android APK → Run wor
 ## Local setup
 
 ```bash
-flutter create --platforms=android --project-name mewvio .
+flutter create --no-pub --platforms=android --project-name mewvio .
 python3 scripts/configure_android_network.py
 flutter pub get --enforce-lockfile
 flutter test
@@ -20,7 +20,7 @@ flutter build apk --debug
 
 ## Accounts and database
 
-Use Flutter stable with Dart 3.9 or newer. The app contains only a Supabase publishable key; never add a service-role or secret key. `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` can be overridden with `--dart-define` for a separate project.
+Use Flutter 3.47.7 with the committed dependency lockfile, matching CI. The app contains only a Supabase publishable key; never add a service-role or secret key. `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` can be overridden with `--dart-define` for a separate project.
 
 Apply `supabase/migrations/20261021194244_private_account_profiles.sql` to a new project before using accounts. It creates private `profiles` with owner-only RLS and column grants. It does not grant company admin membership. The existing `admin_members` table and Cloudflare Access policy remain separate. Run `supabase/tests/private_profiles.sql` as the migration owner to verify permissions; all fixtures are rolled back.
 
