@@ -13,16 +13,60 @@ small,.muted{color:#746f84}#message{margin-top:16px;color:#a23469;white-space:pr
 nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}nav button{background:#fff;color:#6540ba;border:1px solid #dcd1fc}nav button.active{background:#6941e7;color:white}
 table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;border-bottom:1px solid #eee8fc;text-align:left;font-size:13px}
 @media(max-width:550px){header h1{font-size:18px}header{padding:18px}}
+
+/* MEWVIO premium admin interface */
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#241c44;background:#f7f7fc}
+body{background:radial-gradient(ellipse 65% 40% at 90% 0%,#f5eaff 0%,transparent 80%),#f7f7fc;min-height:100vh}
+header{position:relative;z-index:2;background:#fff;color:#231c42;border-bottom:1px solid #eae5f2;padding:17px clamp(18px,4vw,54px);box-shadow:0 1px 16px #2c145408}
+header h1{font-size:21px;letter-spacing:-.5px}header p{color:#9187a5;opacity:1;font-size:12px}
+button{transition:transform .16s,box-shadow .16s,background .16s}button:hover{transform:translateY(-1px);box-shadow:0 8px 22px #6941e71b}button:focus-visible,input:focus-visible{outline:3px solid #b7a2ff;outline-offset:2px}
+button.ghost{background:#f1edff;color:#5c3ac6;border:1px solid #ded5fb}
+main{max-width:1440px;margin:0 auto;padding:24px clamp(15px,3.5vw,46px)}
+.card{border:1px solid #eeebf5;border-radius:22px;box-shadow:0 7px 28px #2f1d5b08;padding:24px;background:#fff}
+.card:hover{border-color:#e1d7f9}
+.login{max-width:450px;margin:clamp(36px,7vh,88px) auto;border:1px solid #ebe4fb;padding:35px;box-shadow:0 25px 80px #51389819}
+.login::before{content:"🔐";display:grid;place-items:center;font-size:27px;width:57px;height:57px;border-radius:17px;background:#f3ecff;margin-bottom:18px}
+.login h2{font-size:27px;letter-spacing:-.7px;margin-bottom:9px}
+.login form button[type=submit]{width:100%;padding:15px;margin-top:2px;background:linear-gradient(100deg,#6142df,#bc5fe6);box-shadow:0 8px 18px #8b53e62b}
+input{background:#faf9fe;border-color:#e5e1ef}input:focus{background:#fff}
+#app{position:relative;padding-left:237px;min-height:calc(100vh - 145px)}
+#tabs{position:absolute;left:0;top:0;width:211px;min-height:calc(100vh - 145px);border:1px solid #eee9f6;border-radius:22px;background:#fff;padding:20px 11px;display:flex;flex-direction:column;gap:5px;box-shadow:0 7px 25px #2f1d5b06}
+#tabs::before{content:"WORKSPACE";font-size:10px;letter-spacing:1.5px;color:#aca2bd;font-weight:800;padding:8px 13px 13px}
+#tabs button{text-align:left;border:0;background:transparent;color:#756b8c;border-radius:12px;padding:14px 15px;font-size:13px;box-shadow:none}
+#tabs button:hover{background:#f7f4fe;transform:none}
+#tabs button.active{color:#6738de;background:linear-gradient(105deg,#f1e9ff,#faeeff);font-weight:800}
+#tabs button[data-tab=overview]::before{content:"◫";margin-right:11px;font-size:17px}
+#tabs button[data-tab=team]::before{content:"♙";margin-right:11px;font-size:17px}
+#tabs button[data-tab=shop]::before{content:"◇";margin-right:11px;font-size:17px}
+#tabs button[data-tab=security]::before{content:"♧";margin-right:11px;font-size:17px}
+.panel h2{font-size:26px;letter-spacing:-.8px;margin:5px 0 22px;color:#261943}
+.panel h3{color:#332552}
+.grid{gap:16px}.grid>.card{min-height:139px;display:flex;flex-direction:column;justify-content:center;gap:13px;border-radius:20px}
+.grid>.card strong{font-size:19px;letter-spacing:-.35px;color:#271c46}
+.grid>.card .muted{font-size:12px;font-weight:700;letter-spacing:.15px}
+.grid>.card:nth-child(1){border-top:3px solid #7350ed}.grid>.card:nth-child(2){border-top:3px solid #ec73ba}.grid>.card:nth-child(3){border-top:3px solid #58b4ea}.grid>.card:nth-child(4){border-top:3px solid #a88bea}
+.tag{vertical-align:middle;margin-left:9px;background:#efe6ff;color:#6741ce}
+#overview>.card{margin-top:8px}
+#identity{font-weight:800;font-size:16px;color:#6543d1}
+table{overflow:hidden}th{color:#827694;background:#faf8fe;font-size:12px}td{color:#473b63}
+#message{max-width:700px;margin:18px 0 20px 237px;font-size:13px;font-weight:600}
+#message:empty{display:none}
+.panel>.card>h2{margin:0 0 12px}
+#security .card{border-left:4px solid #7850e3}
+#shop .grid .card{background:linear-gradient(150deg,#fff,#faf7ff);min-height:130px}
+@media(max-width:850px){#app{padding-left:0}#tabs{position:static;min-height:auto;width:100%;flex-direction:row;overflow-x:auto;margin-bottom:20px;padding:9px;white-space:nowrap}#tabs::before{display:none}#tabs button{padding:11px 12px;flex-shrink:0}#message{margin-left:0}}
+@media(max-width:560px){header{padding:17px}header h1{font-size:17px}header p{font-size:10px}main{padding:17px 12px}.panel h2{font-size:23px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.grid>.card{min-height:120px;padding:14px}.grid>.card strong{font-size:14px}.card{padding:17px}.login{padding:25px;margin:35px auto}#tabs button{font-size:12px}td,th{padding:10px 5px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
 </style></head><body>
-<header><div><h1>🐱 MEWVIO Technologies</h1><p>Private Company Dashboard · Meet. Watch. Vibe.</p></div><button id="logout" class="ghost hidden">Sign out</button></header>
+<header><div><h1>🐱 MEWVIO <span style="font-weight:500;color:#8f82a4">/ Company Admin</span></h1><p>MEWVIO Technologies · Private workspace</p></div><button id="logout" class="ghost hidden">Sign out</button></header>
 <main>
 <section id="setup" class="card login hidden"><h2>Connect Supabase</h2><p class="muted">Configure this web app after creating your Supabase project. Use only your Project URL and publishable/anon key. Never paste a secret or service_role key.</p><label>Project URL<input id="url" placeholder="https://YOUR_PROJECT.supabase.co" autocomplete="off"></label><label>Publishable / anon key<input id="key" type="password" autocomplete="off" placeholder="sb_publishable_..."></label><p><button id="save">Connect project</button></p><p class="muted"><small>Settings are stored in this browser only. This configuration is not an authentication credential.</small></p></section>
 <section id="login" class="card login hidden"><h2>Admin Sign in</h2><p class="muted">Authorized MEWVIO team members only.</p><form id="form"><label>Email<input id="email" type="email" required autocomplete="username" placeholder="mewvio.app@gmail.com"></label><label>Password<input id="password" type="password" required autocomplete="current-password"></label><p><button type="submit">Sign in securely</button></p><p class="muted"><small>Access is limited to approved company administrators.</small></p></form><p><button id="reset" style="background:#f0eaff;color:#6941e7">Change Supabase settings</button></p></section>
 <section id="app" class="hidden"><nav id="tabs"><button data-tab="overview" class="active">Overview</button><button data-tab="team">Team & Roles</button><button data-tab="shop">Shop</button><button data-tab="security">Security</button></nav>
-<div id="overview" class="panel"><h2>Company Overview <span class="tag" id="role"></span></h2><div class="grid"><article class="card"><div class="muted">Company</div><strong>MEWVIO Technologies</strong></article><article class="card"><div class="muted">App</div><strong>MEWVIO</strong></article><article class="card"><div class="muted">Market</div><strong>Cambodia Beta</strong></article><article class="card"><div class="muted">Environment</div><strong>Private Admin</strong></article></div><div class="card"><h3>Signed in</h3><p id="identity"></p><p class="muted">No synthetic sales or user counts are shown. Business analytics require real, permission-controlled data.</p></div></div>
-<div id="team" class="panel hidden"><div class="card"><h2>Company Team</h2><table><thead><tr><th>Member</th><th>Role</th></tr></thead><tbody id="members"><tr><td colspan="2">Loading…</td></tr></tbody></table><p class="muted">Membership changes must be performed by an authorized administrator through approved server-side workflows. Do not change your role in browser code.</p></div></div>
-<div id="shop" class="panel hidden"><div class="card"><h2>MEWVIO Shop Admin</h2><p class="muted">Shop settings are read-only until audited server-side purchase verification and role-based write policies are implemented.</p><div class="grid"><div class="card"><h3>💎 Diamonds</h3><span class="tag">Preview only</span></div><div class="card"><h3>🎁 Virtual Gifts</h3><span class="tag">Preview only</span></div><div class="card"><h3>👑 VIP</h3><span class="tag">Planned</span></div></div></div></div>
-<div id="security" class="panel hidden"><div class="card"><h2>Security</h2><p>Access requires a Supabase Auth session and an active admin_members record. Database RLS policies are the real access boundary.</p><p class="muted">Enable MFA in Supabase Auth, audit privileged actions, and use individual accounts per employee.</p></div></div>
+<div id="overview" class="panel"><h2>Overview <span class="tag" id="role"></span></h2><p class="muted" style="margin-top:-13px;margin-bottom:25px">Welcome to your MEWVIO management workspace. Live analytics will appear once securely connected.</p><div class="grid"><article class="card"><div class="muted">Company</div><strong>MEWVIO Technologies</strong></article><article class="card"><div class="muted">App</div><strong>MEWVIO</strong></article><article class="card"><div class="muted">Market</div><strong>Cambodia Beta</strong></article><article class="card"><div class="muted">Environment</div><strong>Private Admin</strong></article></div><div class="card"><h3>🔐 Authorized workspace</h3><p id="identity"></p><p class="muted">No synthetic sales or user counts are shown. Business analytics require real, permission-controlled data.</p></div></div>
+<div id="team" class="panel hidden"><div class="card"><h2>Team & Roles</h2><table><thead><tr><th>Member</th><th>Role</th></tr></thead><tbody id="members"><tr><td colspan="2">Loading…</td></tr></tbody></table><p class="muted">Membership changes must be performed by an authorized administrator through approved server-side workflows. Do not change your role in browser code.</p></div></div>
+<div id="shop" class="panel hidden"><div class="card"><h2>Shop Management</h2><p class="muted">Shop settings are read-only until audited server-side purchase verification and role-based write policies are implemented.</p><div class="grid"><div class="card"><h3>💎 Diamonds</h3><span class="tag">Preview only</span></div><div class="card"><h3>🎁 Virtual Gifts</h3><span class="tag">Preview only</span></div><div class="card"><h3>👑 VIP</h3><span class="tag">Planned</span></div></div></div></div>
+<div id="security" class="panel hidden"><div class="card"><h2>Security Center</h2><p>Access requires a Supabase Auth session and an active admin_members record. Database RLS policies are the real access boundary.</p><p class="muted">Enable MFA in Supabase Auth, audit privileged actions, and use individual accounts per employee.</p></div></div>
 </section><p id="message" role="status"></p></main>
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
