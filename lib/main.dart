@@ -570,93 +570,182 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  int activeTab = 0;
   bool privateProfile = true;
   bool notifications = true;
-  @override
-  Widget build(BuildContext context) => ListView(
-        padding: const EdgeInsets.all(17),
-        children: [
-          Row(children: [const Expanded(child: Text('My Profile',
-                style: TextStyle(fontSize: 26, color: dark, fontWeight: FontWeight.w900))), demoTag()]),
-          const SizedBox(height: 19),
-          cardBox(Column(children: [
-            SvgPicture.asset(mascot, width: 110, height: 110),
-            const SizedBox(height: 12),
-            const Text('MEWVIO Friend', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900)),
-            const Text('@mewvio_demo', style: TextStyle(color: Colors.grey)),
-            const SizedBox(height: 15),
-            const Text('Good friends, brighter days 💜', textAlign: TextAlign.center),
-            const SizedBox(height: 16),
-            const Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              _Stat('0', 'Posts'), _Stat('0', 'Friends'), _Stat('0', 'Likes')
-            ]),
-          ])),
-          const SizedBox(height: 19),
-          sectionTitle('Settings'),
-          cardBox(Column(children: [
-            SwitchListTile.adaptive(
-              value: privateProfile, activeColor: purple,
-              onChanged: (value) => setState(() => privateProfile = value),
-              secondary: const Icon(Icons.lock_rounded, color: purple),
+  String displayName = 'MEWVIO Friend';
+  String username = 'mewvio_demo';
+  String bio = 'Good friends, brighter days 💜';
+
+  void editProfile() {
+    final name = TextEditingController(text: displayName);
+    final about = TextEditingController(text: bio);
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.fromLTRB(
+          20, 12, 20, MediaQuery.viewInsetsOf(ctx).bottom + 24),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          const Text('Edit profile', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 16),
+          TextField(controller: name, maxLength: 40, decoration: const InputDecoration(labelText: 'Display name', border: OutlineInputBorder())),
+          const SizedBox(height: 10),
+          TextField(controller: about, maxLength: 120, maxLines: 2, decoration: const InputDecoration(labelText: 'Bio', border: OutlineInputBorder())),
+          const SizedBox(height: 12),
+          SizedBox(width: double.infinity, child: FilledButton(
+            onPressed: () {
+              if (name.text.trim().isEmpty) return;
+              setState(() { displayName = name.text.trim(); bio = about.text.trim(); });
+              Navigator.pop(ctx);
+            }, child: const Text('Save changes (demo)'),
+          )),
+          const Text('Changes are only kept while the app stays open.', style: TextStyle(color: Colors.grey, fontSize: 11)),
+        ]),
+      ),
+    ).whenComplete(() { name.dispose(); about.dispose(); });
+  }
+
+  void shareProfile() {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Profile sharing will be available after accounts are connected.')));
+  }
+
+  void openSettings() {
+    showModalBottomSheet<void>(
+      context: context, showDragHandle: true,
+      builder: (ctx) => StatefulBuilder(builder: (ctx, update) => SafeArea(
+        child: Padding(padding: const EdgeInsets.fromLTRB(16, 12, 16, 22),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            const Text('Settings & privacy', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w900)),
+            SwitchListTile(
+              secondary: const Icon(Icons.lock_outline_rounded, color: purple),
               title: const Text('Private profile'),
-              subtitle: const Text('Demo setting only'),
+              subtitle: const Text('Demo only — not synced to a server'),
+              value: privateProfile,
+              onChanged: (v) { setState(() => privateProfile = v); update(() {}); },
             ),
-            const Divider(height: 2),
-            SwitchListTile.adaptive(
-              value: notifications, activeColor: purple,
-              onChanged: (value) => setState(() => notifications = value),
-              secondary: const Icon(Icons.notifications_rounded, color: purple),
+            SwitchListTile(
+              secondary: const Icon(Icons.notifications_outlined, color: purple),
               title: const Text('Notifications'),
-              subtitle: const Text('Demo setting only'),
+              subtitle: const Text('Demo only'),
+              value: notifications,
+              onChanged: (v) { setState(() => notifications = v); update(() {}); },
             ),
-          ])),
-          const SizedBox(height: 19),
-          sectionTitle('Safety & Privacy'),
-          cardBox(Column(children: [
             ListTile(
               leading: const Icon(Icons.shield_outlined, color: purple),
               title: const Text('Safety center'),
-              subtitle: const Text('Learn how to stay safer on MEWVIO'),
-              trailing: const Icon(Icons.chevron_right),
+              subtitle: const Text('Block and report features are not live yet'),
               onTap: () => showDialog<void>(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  title: const Text('MEWVIO Safety Center'),
-                  content: const Text('Keep personal information private. Report unwanted behavior and block accounts when those live features are available. This beta does not connect to real people.'),
-                  actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Got it'))],
-                ),
-              ),
+                context: ctx, builder: (dialog) => AlertDialog(
+                  title: const Text('MEWVIO Safety'),
+                  content: const Text('This is an offline beta. Please avoid sharing personal information. Real user reporting and blocking must be implemented before public launch.'),
+                  actions: [TextButton(onPressed: () => Navigator.pop(dialog), child: const Text('Close'))],
+                )),
             ),
-            const Divider(height: 2),
-            ListTile(
-              leading: const Icon(Icons.report_outlined, color: purple),
-              title: const Text('Report a problem'),
-              subtitle: const Text('Beta feedback — reporting is not connected yet'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => showDialog<void>(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  title: const Text('Report a problem'),
-                  content: const Text('In-app reporting is coming in a future release. This is an offline demo; no report is submitted.'),
-                  actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close'))],
-                ),
-              ),
-            ),
-          ])),
-          const SizedBox(height: 22),
-          const Center(child: Text('MEWVIO v0.1.6 • Stage 1 prototype',
-              style: TextStyle(color: Colors.grey, fontSize: 12))),
-        ],
-      );
-}
+          ]))),
+      )),
+    );
+  }
 
-class _Stat extends StatelessWidget {
-  final String count;
-  final String label;
-  const _Stat(this.count, this.label);
+  Widget stat(String number, String caption) => Expanded(
+    child: Column(children: [
+      Text(number, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 19, color: dark)),
+      const SizedBox(height: 3),
+      Text(caption, style: const TextStyle(color: Colors.black54, fontSize: 12)),
+    ]),
+  );
+
+  Widget emptyPosts() => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 16),
+    child: Column(children: [
+      Icon(activeTab == 0 ? Icons.video_library_outlined : activeTab == 1 ? Icons.lock_outline_rounded : Icons.favorite_border_rounded,
+        size: 51, color: const Color(0xFFA79ABA)),
+      const SizedBox(height: 12),
+      Text(activeTab == 0 ? 'No posts yet' : activeTab == 1 ? 'Private posts' : 'Liked videos',
+        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: dark)),
+      const SizedBox(height: 7),
+      Text(activeTab == 0 ? 'Your video uploads will appear here.'
+        : activeTab == 1 ? 'Private videos will appear here when uploads are enabled.'
+        : 'Videos you like will appear here when accounts are connected.',
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.grey, fontSize: 13)),
+    ]),
+  );
+
   @override
-  Widget build(BuildContext context) => Column(children: [
-    Text(count, style: const TextStyle(fontWeight: FontWeight.w900, color: purple, fontSize: 20)),
-    Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-  ]);
+  Widget build(BuildContext context) => ListView(
+    padding: const EdgeInsets.fromLTRB(0, 8, 0, 28),
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        child: Row(children: [
+          const SizedBox(width: 46),
+          Expanded(child: Text('@$username', textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 19, color: dark))),
+          IconButton(tooltip: 'Settings and privacy', onPressed: openSettings,
+            icon: const Icon(Icons.menu_rounded, color: dark, size: 29)),
+        ]),
+      ),
+      const SizedBox(height: 12),
+      Center(child: Container(
+        width: 104, height: 104,
+        padding: const EdgeInsets.all(9),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white,
+          border: Border.all(color: purple, width: 3)),
+        child: SvgPicture.asset(mascot),
+      )),
+      const SizedBox(height: 12),
+      Text(displayName, textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: dark)),
+      const SizedBox(height: 16),
+      Row(children: [stat('0', 'Following'), stat('0', 'Followers'), stat('0', 'Likes')]),
+      const SizedBox(height: 17),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        child: Row(children: [
+          Expanded(child: FilledButton(
+            onPressed: editProfile,
+            style: FilledButton.styleFrom(backgroundColor: purple, foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 13), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+            child: const Text('Edit profile', style: TextStyle(fontWeight: FontWeight.w800)),
+          )),
+          const SizedBox(width: 9),
+          Expanded(child: OutlinedButton(
+            onPressed: shareProfile,
+            style: OutlinedButton.styleFrom(foregroundColor: dark,
+              padding: const EdgeInsets.symmetric(vertical: 13), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+            child: const Text('Share profile', style: TextStyle(fontWeight: FontWeight.w800)),
+          )),
+        ]),
+      ),
+      const SizedBox(height: 15),
+      Text(bio, textAlign: TextAlign.center, style: const TextStyle(color: dark, fontSize: 14)),
+      const SizedBox(height: 5),
+      const Text('Meet · Watch · Vibe', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey, fontSize: 12)),
+      const SizedBox(height: 22),
+      const Divider(height: 1, color: Color(0xFFE2DDEA)),
+      Row(children: [
+        for (final tab in <(IconData, String)>[
+          (Icons.grid_on_rounded, 'Posts'),
+          (Icons.lock_outline_rounded, 'Private'),
+          (Icons.favorite_border_rounded, 'Likes'),
+        ])
+          Expanded(child: InkWell(
+            onTap: () => setState(() => activeTab = [Icons.grid_on_rounded, Icons.lock_outline_rounded, Icons.favorite_border_rounded].indexOf(tab.$1)),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 13),
+              decoration: BoxDecoration(border: Border(bottom: BorderSide(
+                color: activeTab == [Icons.grid_on_rounded, Icons.lock_outline_rounded, Icons.favorite_border_rounded].indexOf(tab.$1)
+                  ? purple : Colors.transparent, width: 3))),
+              child: Icon(tab.$1, color: activeTab == [Icons.grid_on_rounded, Icons.lock_outline_rounded, Icons.favorite_border_rounded].indexOf(tab.$1)
+                ? purple : Colors.grey),
+            ),
+          )),
+      ]),
+      emptyPosts(),
+      const Center(child: Text('MEWVIO v0.1.7 • Beta profile', style: TextStyle(color: Colors.grey, fontSize: 11))),
+    ],
+  );
 }
