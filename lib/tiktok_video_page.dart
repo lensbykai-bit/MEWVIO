@@ -52,7 +52,7 @@ class _TikTokVideosPageState extends State<TikTokVideosPage> {
           Positioned(
             top: MediaQuery.paddingOf(context).top + 14, left: 12, right: 12,
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              const Icon(Icons.live_tv_rounded, color: Colors.white, size: 24),
+              const Text('v0.1.4', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
               Row(children: [
                 _tab('Following', following, () => setState(() { following = true; toast('Following feed is coming after accounts are connected.'); })),
                 const SizedBox(width: 20),
@@ -76,7 +76,7 @@ class _TikTokVideosPageState extends State<TikTokVideosPage> {
                 Flexible(child: Text(v.$5, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontSize: 12)))
               ]),
               const SizedBox(height: 8),
-              const Text('DEMO • Offline sample video', style: TextStyle(color: Colors.white70, fontSize: 10)),
+              const Text('MEWVIO v0.1.4 • Offline demo', style: TextStyle(color: Colors.white70, fontSize: 10)),
             ]),
           ),
           Positioned(right: 13, bottom: 55, child: Column(children: [
