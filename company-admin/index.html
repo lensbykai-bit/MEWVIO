@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MEWVIO Technologies | Private Admin</title>
+<style>
+:root{font-family:Inter,system-ui,Arial,sans-serif;color:#251a49;background:#f7f4ff}*{box-sizing:border-box}body{margin:0}.hidden{display:none!important}
+header{background:linear-gradient(110deg,#30145b,#7143e8,#eb5abc);padding:21px 5%;color:white;display:flex;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:23px}header p{margin:3px 0;font-size:12px;opacity:.85}button{cursor:pointer;background:#6941e7;color:#fff;border:0;border-radius:12px;padding:12px 17px;font-weight:700}button:disabled{opacity:.6}button.ghost{background:#fff2;color:#fff;border:1px solid #fff5}
+main{max-width:1050px;margin:28px auto;padding:0 18px}.card{background:#fff;border:1px solid #ece5ff;border-radius:19px;padding:22px;box-shadow:0 7px 22px #3112720c;margin-bottom:15px}
+.login{max-width:420px;margin:65px auto}h2{margin-top:0}label{font-size:13px;font-weight:700;display:block;margin-top:16px}
+input{width:100%;margin-top:7px;border:1px solid #d8d0ec;border-radius:12px;padding:13px;font-size:15px}
+small,.muted{color:#746f84}#message{margin-top:16px;color:#a23469;white-space:pre-wrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
+.count{font-size:27px;font-weight:900;color:#6941e7}.tag{display:inline-block;background:#f0eaff;color:#6540ba;padding:6px 11px;border-radius:20px;font-size:12px;font-weight:700}
+nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}nav button{background:#fff;color:#6540ba;border:1px solid #dcd1fc}nav button.active{background:#6941e7;color:white}
+table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;border-bottom:1px solid #eee8fc;text-align:left;font-size:13px}
+@media(max-width:550px){header h1{font-size:18px}header{padding:18px}}
+</style></head><body>
+<header><div><h1>🐱 MEWVIO Technologies</h1><p>Private Company Dashboard · Meet. Watch. Vibe.</p></div><button id="logout" class="ghost hidden">Sign out</button></header>
+<main>
+<section id="setup" class="card login hidden"><h2>Connect Supabase</h2><p class="muted">Configure this web app after creating your Supabase project. Use only your Project URL and publishable/anon key. Never paste a secret or service_role key.</p><label>Project URL<input id="url" placeholder="https://YOUR_PROJECT.supabase.co" autocomplete="off"></label><label>Publishable / anon key<input id="key" type="password" autocomplete="off" placeholder="sb_publishable_..."></label><p><button id="save">Connect project</button></p><p class="muted"><small>Settings are stored in this browser only. This configuration is not an authentication credential.</small></p></section>
+<section id="login" class="card login hidden"><h2>Admin Sign in</h2><p class="muted">Authorized MEWVIO team members only.</p><form id="form"><label>Email<input id="email" type="email" required autocomplete="username" placeholder="mewvio.app@gmail.com"></label><label>Password<input id="password" type="password" required autocomplete="current-password"></label><p><button type="submit">Sign in securely</button></p></form><p><button id="reset" style="background:#f0eaff;color:#6941e7">Change Supabase settings</button></p></section>
+<section id="app" class="hidden"><nav id="tabs"><button data-tab="overview" class="active">Overview</button><button data-tab="team">Team & Roles</button><button data-tab="shop">Shop</button><button data-tab="security">Security</button></nav>
+<div id="overview" class="panel"><h2>Company Overview <span class="tag" id="role"></span></h2><div class="grid"><article class="card"><div class="muted">Company</div><strong>MEWVIO Technologies</strong></article><article class="card"><div class="muted">App</div><strong>MEWVIO</strong></article><article class="card"><div class="muted">Market</div><strong>Cambodia Beta</strong></article><article class="card"><div class="muted">Environment</div><strong>Private Admin</strong></article></div><div class="card"><h3>Signed in</h3><p id="identity"></p><p class="muted">No synthetic sales or user counts are shown. Business analytics require real, permission-controlled data.</p></div></div>
+<div id="team" class="panel hidden"><div class="card"><h2>Company Team</h2><table><thead><tr><th>Member</th><th>Role</th></tr></thead><tbody id="members"><tr><td colspan="2">Loading…</td></tr></tbody></table><p class="muted">Membership changes must be performed by an authorized administrator through approved server-side workflows. Do not change your role in browser code.</p></div></div>
+<div id="shop" class="panel hidden"><div class="card"><h2>MEWVIO Shop Admin</h2><p class="muted">Shop settings are read-only until audited server-side purchase verification and role-based write policies are implemented.</p><div class="grid"><div class="card"><h3>💎 Diamonds</h3><span class="tag">Preview only</span></div><div class="card"><h3>🎁 Virtual Gifts</h3><span class="tag">Preview only</span></div><div class="card"><h3>👑 VIP</h3><span class="tag">Planned</span></div></div></div></div>
+<div id="security" class="panel hidden"><div class="card"><h2>Security</h2><p>Access requires a Supabase Auth session and an active admin_members record. Database RLS policies are the real access boundary.</p><p class="muted">Enable MFA in Supabase Auth, audit privileged actions, and use individual accounts per employee.</p></div></div>
+</section><p id="message" role="status"></p></main>
+<script type="module">
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+let client=null;
+const el=id=>document.getElementById(id);
+function show(id){for(const s of ['setup','login','app'])el(s).classList.toggle('hidden',s!==id)}
+function msg(t){el('message').textContent=t||''}
+function init(){const url=localStorage.getItem('mewvio_url'),key=localStorage.getItem('mewvio_pub');if(!url||!key){show('setup');return}try{client=createClient(url,key);show('login');client.auth.getSession().then(({data})=>{if(data.session)authorize(data.session.user)}).catch(()=>{})}catch{show('setup')}}
+async function authorize(user){try{const {data,error}=await client.from('admin_members').select('role,is_active').eq('user_id',user.id).eq('is_active',true).maybeSingle();if(error)throw error;if(!data){await client.auth.signOut();show('login');msg('Access denied: this account is not an active MEWVIO admin.');return}el('identity').textContent=user.email||user.id;el('role').textContent=data.role;const members=await client.from('admin_members').select('role,user_id').eq('is_active',true).limit(50);el('members').replaceChildren();if(members.error)throw members.error;for(const row of members.data||[]){const tr=document.createElement('tr');const td1=document.createElement('td'),td2=document.createElement('td');td1.textContent=row.user_id;td2.textContent=row.role;tr.append(td1,td2);el('members').append(tr)}show('app');msg('')}catch(e){show('login');msg('Could not verify admin permissions: '+e.message)}}
+el('save').onclick=()=>{const url=el('url').value.trim(),key=el('key').value.trim();if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url)||!key){msg('Enter your valid Supabase project URL and publishable/anon key.');return}localStorage.setItem('mewvio_url',url);localStorage.setItem('mewvio_pub',key);location.reload()};
+el('form').onsubmit=async e=>{e.preventDefault();msg('Signing in…');const {data,error}=await client.auth.signInWithPassword({email:el('email').value.trim(),password:el('password').value});el('password').value='';if(error){msg(error.message);return}await authorize(data.user)};
+el('logout').onclick=async()=>{await client?.auth.signOut();location.reload()};
+el('reset').onclick=()=>{localStorage.removeItem('mewvio_url');localStorage.removeItem('mewvio_pub');location.reload()};
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(t=>t.classList.toggle('active',t===b));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('hidden',p.id!==b.dataset.tab))});
+new MutationObserver(()=>el('logout').classList.toggle('hidden',el('app').classList.contains('hidden'))).observe(el('app'),{attributes:true,attributeFilter:['class']});
+init();
+</script></body></html>
