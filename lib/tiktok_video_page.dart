@@ -52,11 +52,11 @@ class _TikTokVideosPageState extends State<TikTokVideosPage> {
           Positioned(
             top: MediaQuery.paddingOf(context).top + 14, left: 12, right: 12,
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              const Text('MEWVIO', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
+              const Text('✦ MEWVIO', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w900)),
               Row(children: [
-                _tab('Following', following, () => setState(() { following = true; toast('Following feed is coming after accounts are connected.'); })),
+                _tab('Circle', following, () => setState(() { following = true; toast('Your Circle feed is coming after accounts are connected.'); })),
                 const SizedBox(width: 20),
-                _tab('For You', !following, () => setState(() => following = false)),
+                _tab('Discover', !following, () => setState(() => following = false)),
               ]),
               IconButton(onPressed: () => toast('Search will be available in Stage 2.'), icon: const Icon(Icons.search, color: Colors.white)),
             ]),
@@ -76,7 +76,7 @@ class _TikTokVideosPageState extends State<TikTokVideosPage> {
                 Flexible(child: Text(v.$5, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontSize: 12)))
               ]),
               const SizedBox(height: 8),
-              const Text('MEWVIO beta • Offline demo', style: TextStyle(color: Colors.white70, fontSize: 10)),
+              const Text('MEWVIO Discover • Beta preview', style: TextStyle(color: Colors.white70, fontSize: 10)),
             ]),
           ),
           Positioned(right: 13, bottom: 55, child: Column(children: [
