@@ -22,12 +22,12 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
   String bio = 'Good people. Good vibes. More friends on MEWVIO 💜';
   int tab = 0;
   static const posts = <String>[
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=350&q=65',
-    'https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=350&q=65',
-    'https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=350&q=65',
-    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=350&q=65',
-    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=350&q=65',
-    'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=350&q=65',
+    'assets/demo/portrait_sophie.jpg',
+    'assets/demo/stars.jpg',
+    'assets/demo/cat.jpg',
+    'assets/demo/concert.jpg',
+    'assets/demo/portrait_luna.jpg',
+    'assets/demo/hero_sunset.jpg',
   ];
 
   void openWallet() => Navigator.push(context,
@@ -115,8 +115,8 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
             const DecoratedBox(decoration: BoxDecoration(gradient: LinearGradient(
               colors: [Color(0xFF371F7E), Color(0xFFB953A8), Color(0xFFED8B9A)],
               begin: Alignment.topLeft, end: Alignment.bottomRight))),
-            Image.network(
-              'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=900&q=70',
+            Image.asset(
+              'assets/demo/hero_sunset.jpg',
               fit: BoxFit.cover, errorBuilder: (_, __, ___) => const SizedBox.shrink()),
             const DecoratedBox(decoration: BoxDecoration(gradient: LinearGradient(
               begin: Alignment.topCenter, end: Alignment.bottomCenter,
@@ -215,7 +215,7 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
                 _violet, _pink.withValues(alpha: .7), _background])),
             clipBehavior: Clip.antiAlias,
             child: Stack(fit: StackFit.expand, children: [
-              Image.network(posts[index], fit: BoxFit.cover,
+              Image.asset(posts[index], fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) =>
                   const Center(child: Icon(Icons.pets_rounded,
                     color: Colors.white54, size: 38))),
