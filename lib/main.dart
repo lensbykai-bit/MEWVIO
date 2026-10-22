@@ -405,53 +405,77 @@ class MatchPage extends StatefulWidget {
 }
 
 class _MatchPageState extends State<MatchPage> {
-  int active = 0;
-  final friends = const [
-    ('Luna', 'Music • Books • Art', '🎧'),
-    ('Dara', 'Travel • Photography', '🌍'),
-    ('SreyNita', 'Games • Music', '🎮'),
-    ('Sokha', 'Films • Nature', '🌿'),
+  int selectedInterest = 0;
+  static const interests = ['Music', 'Games', 'Travel', 'Anime', 'Art', 'Pets'];
+  static const people = [
+    ('Luna','🎧','Music & art'),('Dara','📷','Travel & photos'),
+    ('Mina','🎨','Anime & drawing'),('Kai','🎮','Games & friends'),
   ];
-
+  void notice(String text) => ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(text),duration: const Duration(seconds: 2)));
   @override
-  Widget build(BuildContext context) => ListView(children: [
-        headline('Find Friends', 'Explore demo friend profiles'),
-        Padding(padding: const EdgeInsets.all(18), child: Column(children: [
-          Container(
-            width: double.infinity, padding: const EdgeInsets.all(30),
-            decoration: BoxDecoration(gradient: gradient, borderRadius: BorderRadius.circular(26)),
-            child: Column(children: [
-              SvgPicture.asset(mascot, width: 115, height: 115),
-              const SizedBox(height: 14),
-              const Text('Discover your people', style: TextStyle(fontSize: 25,
-                  fontWeight: FontWeight.w900, color: Colors.white)),
-              const Text('Friendship demo • no real matching',
-                  style: TextStyle(color: Colors.white70)),
-            ]),
-          ),
-          const SizedBox(height: 18),
-          cardBox(Column(children: [
-            CircleAvatar(radius: 37, backgroundColor: const Color(0xFFF3E3FF),
-                child: Text(friends[active].$3, style: const TextStyle(fontSize: 32))),
-            const SizedBox(height: 10),
-            Text(friends[active].$1, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 23)),
-            Text(friends[active].$2, style: const TextStyle(color: Colors.grey)),
-            const SizedBox(height: 18),
-            SizedBox(width: double.infinity, child: FilledButton.icon(
-              style: FilledButton.styleFrom(backgroundColor: purple, padding: const EdgeInsets.all(15)),
-              onPressed: () => setState(() => active = (active + 1) % friends.length),
-              icon: const Icon(Icons.shuffle_rounded),
-              label: const Text('Discover next friend'),
-            )),
+  Widget build(BuildContext context) => Container(
+    color: const Color(0xFF090A18),
+    child: ListView(padding: const EdgeInsets.fromLTRB(16,18,16,25), children: [
+      Row(children: [
+        const Expanded(child: Text('MEWVIO Connect',style:TextStyle(color:Colors.white,fontSize:25,fontWeight:FontWeight.w900))),
+        IconButton(onPressed:()=>notice('Search is a demo preview.'),icon:const Icon(Icons.search,color:Colors.white)),
+      ]),
+      const SizedBox(height:8),
+      Container(padding:const EdgeInsets.all(20),decoration:BoxDecoration(
+        gradient:gradient,borderRadius:BorderRadius.circular(25)),
+        child:Row(children:[
+          const Expanded(child: Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
+            Text('Meet new friends',style:TextStyle(color:Colors.white,fontSize:22,fontWeight:FontWeight.bold)),
+            SizedBox(height:6),
+            Text('Same vibes. More fun. 💜',style:TextStyle(color:Colors.white70)),
+            SizedBox(height:10),
+            Text('DEMO • sample profiles only',style:TextStyle(color:Colors.white70,fontSize:11))
           ])),
-          const SizedBox(height: 18),
-          cardBox(const Row(children: [
-            Icon(Icons.verified_user_rounded, color: purple),
-            SizedBox(width: 12),
-            Expanded(child: Text('Real matching will require age-appropriate safety checks, block and report tools.')),
-          ])),
+          SvgPicture.asset(mascot,width:95,height:95),
         ])),
-      ]);
+      const SizedBox(height:18),
+      const Text('Connect your way',style:TextStyle(color:Colors.white,fontSize:19,fontWeight:FontWeight.bold)),
+      const SizedBox(height:10),
+      Row(children:[
+        _feature(Icons.videocam_rounded,'Video Chat',()=>notice('Video calls are not connected yet.')),
+        _feature(Icons.forum_rounded,'Text Chat',()=>notice('Open Chats from the bottom bar.')),
+        _feature(Icons.mic_rounded,'Voice Party',()=>Navigator.push(context,MaterialPageRoute(builder:(_)=>const Scaffold(body:SafeArea(child:PartyPage()))))),
+      ]),
+      const SizedBox(height:24),
+      const Text('People to discover',style:TextStyle(color:Colors.white,fontSize:19,fontWeight:FontWeight.bold)),
+      const SizedBox(height:12),
+      SizedBox(height:170,child:ListView(scrollDirection:Axis.horizontal,children:[
+        for (final person in people) Container(width:133,margin:const EdgeInsets.only(right:11),
+          padding:const EdgeInsets.all(12),decoration:BoxDecoration(color:const Color(0xFF211A38),borderRadius:BorderRadius.circular(19)),
+          child:Column(children:[
+            CircleAvatar(radius:29,backgroundColor:const Color(0xFF594292),child:Text(person.$2,style:const TextStyle(fontSize:29))),
+            const SizedBox(height:10),
+            Text(person.$1,style:const TextStyle(color:Colors.white,fontWeight:FontWeight.bold)),
+            Text(person.$3,textAlign:TextAlign.center,style:const TextStyle(color:Colors.white60,fontSize:11)),
+            TextButton(onPressed:()=>notice('Matching is unavailable in this demo.'),child:const Text('Explore')),
+          ])),
+      ])),
+      const SizedBox(height:23),
+      const Text('Find friends by interests',style:TextStyle(color:Colors.white,fontSize:19,fontWeight:FontWeight.bold)),
+      const SizedBox(height:12),
+      Wrap(spacing:8,runSpacing:8,children:[
+        for(var i=0;i<interests.length;i++) ChoiceChip(
+          label:Text(interests[i]),selected:selectedInterest==i,
+          selectedColor:const Color(0xFFE9B1FF),onSelected:(_)=>setState(()=>selectedInterest=i)),
+      ]),
+      const SizedBox(height:16),
+      const Text('All profiles are fictional samples. Public matching requires moderation, age-appropriate protections, and reporting tools.',style:TextStyle(color:Colors.white54,fontSize:12)),
+    ]),
+  );
+  Widget _feature(IconData icon,String name,VoidCallback callback)=>Expanded(child:Padding(
+    padding:const EdgeInsets.only(right:7),
+    child:InkWell(onTap:callback,child:Container(height:102,padding:const EdgeInsets.all(8),
+      decoration:BoxDecoration(color:const Color(0xFF241B41),borderRadius:BorderRadius.circular(18)),
+      child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[
+        Icon(icon,color:const Color(0xFFF47ACB),size:31),const SizedBox(height:10),
+        Text(name,textAlign:TextAlign.center,style:const TextStyle(color:Colors.white,fontSize:12,fontWeight:FontWeight.bold)),
+      ])))));
 }
 
 class ChatPage extends StatefulWidget {
@@ -536,72 +560,62 @@ class PartyPage extends StatefulWidget {
 
 class _PartyPageState extends State<PartyPage> {
   int? roomIndex;
-  bool muted = true;
-  final rooms = const [
-    ('Chill Vibes', 'Music & good conversation', '🎵'),
-    ('Game Friends', 'Games and friendship', '🎮'),
-    ('Travel Talk', 'Share your travel stories', '🌎'),
-    ('Creative Corner', 'Art, books and ideas', '🎨'),
+  bool muted=true;
+  static const rooms=[
+    ('Chill & Talk','💬','Meet new friends'),
+    ('Music Vibes','🎵','Talk about your favorite songs'),
+    ('Game Together','🎮','Find teammates'),
+    ('Late Night Talk','🌙','Relaxing conversations'),
   ];
-
   @override
-  Widget build(BuildContext context) => Column(children: [
-        headline('Voice Party', 'Preview of social audio rooms'),
-        Expanded(child: ListView(padding: const EdgeInsets.all(16), children: [
-          Container(padding: const EdgeInsets.all(22),
-              decoration: BoxDecoration(gradient: gradient, borderRadius: BorderRadius.circular(25)),
-              child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Icon(Icons.headset_mic_rounded, color: Colors.white, size: 40),
-                SizedBox(height: 10),
-                Text("Let's talk, let's make friends",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 23)),
-                Text('Audio rooms are UI demos until a voice server is connected.',
-                    style: TextStyle(color: Colors.white70)),
-              ])),
-          const SizedBox(height: 16),
-          ...List.generate(rooms.length, (i) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: InkWell(
-              onTap: () => setState(() { roomIndex = i; muted = true; }),
-              borderRadius: BorderRadius.circular(22),
-              child: cardBox(Row(children: [
-                CircleAvatar(radius: 26, backgroundColor: const Color(0xFFECE5FF),
-                    child: Text(rooms[i].$3, style: const TextStyle(fontSize: 25))),
-                const SizedBox(width: 12),
-                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(rooms[i].$1, style: const TextStyle(fontWeight: FontWeight.w800)),
-                  Text(rooms[i].$2, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                ])),
-                const Icon(Icons.chevron_right_rounded, color: purple),
-              ])),
-            ),
-          )),
-          if (roomIndex != null) Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(color: dark, borderRadius: BorderRadius.circular(24)),
-            child: Column(children: [
-              Text(rooms[roomIndex!].$1, style: const TextStyle(color: Colors.white,
-                  fontSize: 23, fontWeight: FontWeight.w900)),
-              const SizedBox(height: 7),
-              const Text('DEMO ROOM — no audio is transmitted',
-                  style: TextStyle(color: Colors.white70)),
-              const SizedBox(height: 18),
-              SvgPicture.asset(mascot, width: 90, height: 90),
-              const SizedBox(height: 18),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                OutlinedButton.icon(
-                  onPressed: () => setState(() => muted = !muted),
-                  icon: Icon(muted ? Icons.mic_off : Icons.mic),
-                  label: Text(muted ? 'Muted' : 'Mic demo'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: () => setState(() => roomIndex = null),
-                  icon: const Icon(Icons.call_end),
-                  label: const Text('Leave'),
-                ),
-              ]),
-            ]),
-          ),
+  Widget build(BuildContext context)=>Container(
+    color:const Color(0xFF0A0918),
+    child:ListView(padding:const EdgeInsets.fromLTRB(17,18,17,28),children:[
+      const Text('MEWVIO Voice Party',style:TextStyle(color:Colors.white,fontWeight:FontWeight.w900,fontSize:25)),
+      const SizedBox(height:8),
+      Container(padding:const EdgeInsets.all(20),decoration:BoxDecoration(
+        gradient:gradient,borderRadius:BorderRadius.circular(23)),
+        child:Row(children:[
+          const Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
+            Text('Find your vibe',style:TextStyle(color:Colors.white,fontWeight:FontWeight.bold,fontSize:22)),
+            SizedBox(height:7),
+            Text('Chat • Sing • Play • Connect',style:TextStyle(color:Colors.white70)),
+            SizedBox(height:9),
+            Text('DEMO ROOMS',style:TextStyle(color:Colors.white70,fontSize:11)),
+          ])),
+          SvgPicture.asset(mascot,width:105,height:105),
         ])),
-      ]);
+      const SizedBox(height:20),
+      const Text('Explore rooms',style:TextStyle(color:Colors.white,fontWeight:FontWeight.bold,fontSize:19)),
+      const SizedBox(height:12),
+      GridView.builder(shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),itemCount:rooms.length,
+        gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:2,crossAxisSpacing:10,mainAxisSpacing:10,childAspectRatio:1.16),
+        itemBuilder:(context,i)=>InkWell(onTap:()=>setState((){roomIndex=i;muted=true;}),
+          child:Container(padding:const EdgeInsets.all(13),decoration:BoxDecoration(
+            borderRadius:BorderRadius.circular(18),color:const Color(0xFF201B3A),
+            border:Border.all(color:roomIndex==i?pink:Colors.white12)),
+            child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[
+              Text(rooms[i].$2,style:const TextStyle(fontSize:31)),
+              const SizedBox(height:9),
+              Text(rooms[i].$1,style:const TextStyle(color:Colors.white,fontWeight:FontWeight.bold)),
+              const SizedBox(height:4),
+              Text(rooms[i].$3,textAlign:TextAlign.center,style:const TextStyle(color:Colors.white60,fontSize:11)),
+            ])))),
+      const SizedBox(height:20),
+      if(roomIndex!=null) Container(padding:const EdgeInsets.all(18),decoration:BoxDecoration(
+        color:const Color(0xFF292046),borderRadius:BorderRadius.circular(18)),
+        child:Column(children:[
+          Text(rooms[roomIndex!].$1,style:const TextStyle(color:Colors.white,fontSize:20,fontWeight:FontWeight.bold)),
+          const SizedBox(height:8),
+          const Text('Preview only • No microphone is transmitting audio',style:TextStyle(color:Colors.white70)),
+          const SizedBox(height:12),
+          Row(mainAxisAlignment:MainAxisAlignment.center,children:[
+            TextButton.icon(onPressed:()=>setState(()=>muted=!muted),icon:Icon(muted?Icons.mic_off:Icons.mic),label:Text(muted?'Muted':'Microphone preview')),
+            TextButton(onPressed:()=>setState(()=>roomIndex=null),child:const Text('Leave'))
+          ]),
+        ])),
+      const SizedBox(height:18),
+      const Text('Live voice chat is not enabled in this demo.',style:TextStyle(color:Colors.white54,fontSize:12),textAlign:TextAlign.center),
+    ]),
+  );
 }
