@@ -12,6 +12,8 @@ void main() {
     final profileTab = tester.widget<InkWell>(find.byKey(const Key('nav-Profile')));
     profileTab.onTap!.call();
     await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.byKey(const Key('account-email')), 170);
+    await tester.pumpAndSettle();
     expect(find.byKey(const Key('account-email')), findsOneWidget);
     expect(find.text('Create a new account'), findsOneWidget);
     accounts.changeUser('alice');
