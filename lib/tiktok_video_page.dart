@@ -17,9 +17,9 @@ class _TikTokVideosPageState extends State<TikTokVideosPage> {
   bool following = false;
   int selected = 0;
   static const videos = [
-    ('assets/videos/mewvio_1.mp4', '@mewvio', 'Meet. Watch. Vibe. 💜', '#mewvio #foryou', 'MEWVIO Original', '12.3K'),
-    ('assets/videos/mewvio_2.mp4', '@mewvio.fun', 'Say hello to your next adventure ✨', '#friends #discover', 'Feel Good Vibes', '8.4K'),
-    ('assets/videos/mewvio_3.mp4', '@mewvio.club', 'Swipe up and share a smile 🐱', '#shorts #fun', 'Cosmic Pop', '21.5K')
+    ('assets/videos/mewvio_1.mp4', '@mewvio', 'Meet. Watch. Vibe. 💜', '#mewvio #foryou', 'MEWVIO Original', '0'),
+    ('assets/videos/mewvio_2.mp4', '@mewvio.fun', 'Say hello to your next adventure ✨', '#friends #discover', 'Feel Good Vibes', '0'),
+    ('assets/videos/mewvio_3.mp4', '@mewvio.club', 'Swipe up and share a smile 🐱', '#shorts #fun', 'Cosmic Pop', '0')
   ];
 
   @override
@@ -147,6 +147,12 @@ class _OfflineVideoState extends State<_OfflineVideo> {
   bool initialized = false;
   bool failed = false;
   bool muted = true;
+  bool showPoster = true;
+  static const posterUrls = [
+    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=850&q=75',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=850&q=75',
+    'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=850&q=75',
+  ];
 
   @override
   void initState() { super.initState(); _start(); }
@@ -160,7 +166,7 @@ class _OfflineVideoState extends State<_OfflineVideo> {
       await controller.setVolume(0);
       if (!mounted || controller != player) return;
       setState(() => initialized = true);
-      if (widget.active) await controller.play();
+      if (widget.active && !showPoster) await controller.play();
     } catch (_) {
       if (mounted) setState(() => failed = true);
     }
@@ -170,7 +176,7 @@ class _OfflineVideoState extends State<_OfflineVideo> {
   void didUpdateWidget(covariant _OfflineVideo oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.active != widget.active && initialized && player != null) {
-      widget.active ? player!.play() : player!.pause();
+      widget.active && !showPoster ? player!.play() : player!.pause();
     }
   }
 
@@ -188,8 +194,13 @@ class _OfflineVideoState extends State<_OfflineVideo> {
     return GestureDetector(
       onTap: () {
         if (!initialized || player == null) return;
-        player!.value.isPlaying ? player!.pause() : player!.play();
-        setState(() {});
+        if (showPoster) {
+          setState(() => showPoster = false);
+          player!.play();
+        } else {
+          player!.value.isPlaying ? player!.pause() : player!.play();
+          setState(() {});
+        }
       },
       child: Stack(fit: StackFit.expand, children: [
         DecoratedBox(decoration: BoxDecoration(gradient: LinearGradient(
@@ -198,6 +209,20 @@ class _OfflineVideoState extends State<_OfflineVideo> {
           FittedBox(fit: BoxFit.cover, child: SizedBox(
             width: player!.value.size.width, height: player!.value.size.height,
             child: VideoPlayer(player!))),
+        if (showPoster)
+          Image.network(posterUrls[widget.index % posterUrls.length],
+            fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Center(
+              child: Icon(Icons.pets_rounded, color: Colors.white54, size: 90))),
+        if (showPoster)
+          const Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Icon(Icons.play_circle_fill_rounded, size: 66,
+              color: Color(0xCCFFFFFF)),
+            SizedBox(height: 9),
+            Text('Tap to play demo video',
+              style: TextStyle(color: Colors.white,
+                fontWeight: FontWeight.bold, shadows: [
+                  Shadow(color: Colors.black87, blurRadius: 7)])),
+          ])),
         Positioned(right: 15, top: MediaQuery.paddingOf(context).top + 75,
           child: IconButton(
             tooltip: muted ? 'Unmute demo video' : 'Mute demo video',
@@ -213,7 +238,7 @@ class _OfflineVideoState extends State<_OfflineVideo> {
           Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
             Icon(failed ? Icons.play_circle_outline : Icons.pets_rounded, color: Colors.white70, size: 64),
             const SizedBox(height: 12),
-            Text(failed ? 'Preview available • Video could not play' : 'MEWVIO',
+            Text(failed ? 'Video preview could not play' : 'MEWVIO',
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 23)),
             if (!failed) const Padding(padding: EdgeInsets.only(top: 16), child: CircularProgressIndicator(color: Colors.white)),
           ])),
