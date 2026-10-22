@@ -68,6 +68,9 @@ jobs:
       - name: Generate bundled offline video samples
         run: bash scripts/generate_demo_videos.sh
 
+      - name: Bundle MEWVIO demo images for offline use
+        run: python3 scripts/package_demo_photos.py
+
       - name: Resolve dependencies
         run: flutter pub get --enforce-lockfile
 
