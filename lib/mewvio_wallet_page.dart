@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 const _bg = Color(0xFF090A15);
 const _surface = Color(0xFF19182A);
 const _pink = Color(0xFFFF4EAA);
-const _purple = Color(0xFF8B5CF6);
 const _cyan = Color(0xFF5DDFF0);
 
 class MewvioWalletPage extends StatefulWidget {
