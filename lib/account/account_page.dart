@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'account_repository.dart';
+import '../mewvio_wallet_page.dart';
 
 const _purple = Color(0xFF6941E7);
 
@@ -375,6 +376,49 @@ class _ProfileViewState extends State<_ProfileView> {
     }
   }
 
+  void _mewvioMenu() {
+    showModalBottomSheet<void>(
+      context: context, isScrollControlled: true,
+      backgroundColor: const Color(0xFF141322), showDragHandle: true,
+      builder: (sheet) => SafeArea(child: Padding(
+        padding: const EdgeInsets.fromLTRB(18, 5, 18, 22),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('MEWVIO Space', style: TextStyle(color: Colors.white,
+            fontSize: 25, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 4),
+          const Text('Your creative corner', style: TextStyle(color: Colors.white60)),
+          const SizedBox(height: 18),
+          ListTile(
+            leading: const Icon(Icons.account_balance_wallet_outlined, color: Color(0xFFF15CBF)),
+            title: const Text('MEWVIO Wallet', style: TextStyle(color: Colors.white)),
+            subtitle: const Text('Coin packs • Preview', style: TextStyle(color: Colors.white54)),
+            trailing: const Icon(Icons.chevron_right, color: Colors.white70),
+            onTap: () {
+              Navigator.pop(sheet);
+              Navigator.push(context, MaterialPageRoute<void>(
+                builder: (_) => const MewvioWalletPage()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.auto_awesome_rounded, color: Color(0xFF7FDDF9)),
+            title: const Text('Creator Studio', style: TextStyle(color: Colors.white)),
+            subtitle: const Text('Coming soon', style: TextStyle(color: Colors.white54)),
+            onTap: () {
+              Navigator.pop(sheet);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Creator Studio is planned for a later release.')));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shield_outlined, color: Color(0xFFB38BFF)),
+            title: const Text('Settings & Privacy', style: TextStyle(color: Colors.white)),
+            onTap: () { Navigator.pop(sheet); _settings(); },
+          ),
+        ]),
+      )),
+    );
+  }
+
   void _settings() {
     showModalBottomSheet<void>(
       context: context,
@@ -414,7 +458,7 @@ class _ProfileViewState extends State<_ProfileView> {
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900),
             )),
-            IconButton(tooltip: 'Settings and privacy', onPressed: _settings,
+            IconButton(tooltip: 'Settings and privacy', onPressed: _mewvioMenu,
                 icon: const Icon(Icons.menu_rounded)),
           ]),
           const SizedBox(height: 16),
@@ -444,7 +488,7 @@ class _ProfileViewState extends State<_ProfileView> {
                 )),
               ])),
             ),
-            const Text('Cover preview • not uploaded', textAlign: TextAlign.center,
+            const Text('MEWVIO Cover • local preview', textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey, fontSize: 11)),
             Transform.translate(offset: const Offset(0, -16), child: Center(child: Container(
               width: 104, height: 104, padding: const EdgeInsets.all(9),
