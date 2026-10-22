@@ -132,6 +132,7 @@ class _MainShellState extends State<MainShell> {
   Widget _navItem(int index, String label, IconData normal, IconData activeIcon) {
     final active = selected == index && extraPage == null;
     return Expanded(child: InkWell(
+      key: Key('nav-$label'),
       onTap: () => chooseTab(index),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Icon(active ? activeIcon : normal, color: active ? Colors.white : Colors.white60, size: 27),
