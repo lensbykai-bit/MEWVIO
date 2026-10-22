@@ -52,7 +52,7 @@ class _TikTokVideosPageState extends State<TikTokVideosPage> {
           Positioned(
             top: MediaQuery.paddingOf(context).top + 14, left: 12, right: 12,
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              const Text('v0.1.4', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
+              const Text('MEWVIO', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
               Row(children: [
                 _tab('Following', following, () => setState(() { following = true; toast('Following feed is coming after accounts are connected.'); })),
                 const SizedBox(width: 20),
@@ -76,7 +76,7 @@ class _TikTokVideosPageState extends State<TikTokVideosPage> {
                 Flexible(child: Text(v.$5, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontSize: 12)))
               ]),
               const SizedBox(height: 8),
-              const Text('MEWVIO v0.1.4 • Offline demo', style: TextStyle(color: Colors.white70, fontSize: 10)),
+              const Text('MEWVIO beta • Offline demo', style: TextStyle(color: Colors.white70, fontSize: 10)),
             ]),
           ),
           Positioned(right: 13, bottom: 55, child: Column(children: [
@@ -146,6 +146,7 @@ class _OfflineVideoState extends State<_OfflineVideo> {
   VideoPlayerController? player;
   bool initialized = false;
   bool failed = false;
+  bool muted = true;
 
   @override
   void initState() { super.initState(); _start(); }
@@ -197,6 +198,17 @@ class _OfflineVideoState extends State<_OfflineVideo> {
           FittedBox(fit: BoxFit.cover, child: SizedBox(
             width: player!.value.size.width, height: player!.value.size.height,
             child: VideoPlayer(player!))),
+        Positioned(right: 15, top: MediaQuery.paddingOf(context).top + 75,
+          child: IconButton(
+            tooltip: muted ? 'Unmute demo video' : 'Mute demo video',
+            onPressed: () {
+              if (player == null || !initialized) return;
+              setState(() => muted = !muted);
+              player!.setVolume(muted ? 0 : 1);
+            },
+            icon: Icon(muted ? Icons.volume_off_rounded : Icons.volume_up_rounded, color: Colors.white),
+          ),
+        ),
         if (!initialized)
           Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
             Icon(failed ? Icons.play_circle_outline : Icons.pets_rounded, color: Colors.white70, size: 64),
