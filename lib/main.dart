@@ -5,6 +5,7 @@ import 'account/account_repository.dart';
 import 'tiktok_video_page.dart';
 import 'mewvio_shop_page.dart';
 import 'mewvio_wallet_page.dart';
+import 'mewvio_demo_profile_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
 
@@ -96,13 +97,20 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final darkScreen = selected == 0 || selected == 4;
+    final darkScreen = selected == 0 || selected == 1 || selected == 4;
     final pages = <Widget>[
       const TikTokVideosPage(),
       const MatchPage(),
       const SizedBox.shrink(),
       const ChatPage(),
-      AccountPage(repository: widget.accounts),
+      widget.accounts.currentSession == null
+          ? MewvioDemoProfilePage(onSignIn: () => Navigator.push(context,
+              MaterialPageRoute<void>(builder: (_) => Scaffold(
+                backgroundColor: pale,
+                appBar: AppBar(title: const Text('MEWVIO Account')),
+                body: AccountPage(repository: widget.accounts),
+              ))))
+          : AccountPage(repository: widget.accounts),
     ];
     final body = extraPage == 1 ? const PartyPage()
         : extraPage == 2 ? const MewvioShopPage() : pages[selected];
@@ -113,21 +121,21 @@ class _MainShellState extends State<MainShell> {
         decoration: const BoxDecoration(color: Color(0xFF10101D), border: Border(top: BorderSide(color: Color(0xFF302447)))),
         padding: const EdgeInsets.symmetric(vertical: 7),
         child: Row(children: [
-          _navItem(0, 'Vibes', Icons.play_circle_outline_rounded, Icons.play_circle_filled_rounded),
-          _navItem(1, 'Connect', Icons.people_outline_rounded, Icons.people_rounded),
+          _navItem(0, 'Home', Icons.home_outlined, Icons.home_rounded),
+          _navItem(1, 'Match', Icons.favorite_outline_rounded, Icons.favorite_rounded),
           Expanded(child: Center(child: InkWell(
             onTap: openCreate, borderRadius: BorderRadius.circular(9),
-            child: Container(width: 51, height: 34,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),
+            child: Container(width: 46, height: 43,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(24),
                 gradient: const LinearGradient(colors: [Color(0xFF4ACFE8), Color(0xFF9A5FEA), Color(0xFFF353AB)])),
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.all(3),
               child: const DecoratedBox(decoration: BoxDecoration(
-                color: Color(0xFF171325), borderRadius: BorderRadius.all(Radius.circular(5))),
-                child: Icon(Icons.pets_rounded, color: Colors.white, size: 26)),
+                color: Color(0xFF38275D), shape: BoxShape.circle),
+                child: Icon(Icons.add_rounded, color: Colors.white, size: 29)),
             ),
           ))),
-          _navItem(3, 'Chats', Icons.chat_bubble_outline_rounded, Icons.chat_bubble_rounded),
-          _navItem(4, 'Me', Icons.person_outline_rounded, Icons.person_rounded),
+          _navItem(3, 'Chat', Icons.chat_bubble_outline_rounded, Icons.chat_bubble_rounded),
+          _navItem(4, 'Profile', Icons.person_outline_rounded, Icons.person_rounded),
         ]),
       ))),
     );
@@ -139,9 +147,9 @@ class _MainShellState extends State<MainShell> {
       key: Key('nav-$label'),
       onTap: () => chooseTab(index),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Icon(active ? activeIcon : normal, color: active ? Colors.white : Colors.white60, size: 27),
+        Icon(active ? activeIcon : normal, color: active ? pink : Colors.white60, size: 27),
         const SizedBox(height: 3),
-        Text(label, style: TextStyle(color: active ? Colors.white : Colors.white60,
+        Text(label, style: TextStyle(color: active ? pink : Colors.white60,
           fontSize: 11, fontWeight: active ? FontWeight.w800 : FontWeight.w500)),
       ]),
     ));
