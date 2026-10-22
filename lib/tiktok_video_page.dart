@@ -149,9 +149,9 @@ class _OfflineVideoState extends State<_OfflineVideo> {
   bool muted = true;
   bool showPoster = true;
   static const posterUrls = [
-    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=850&q=75',
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=850&q=75',
-    'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=850&q=75',
+    'assets/demo/portrait_luna.jpg',
+    'assets/demo/portrait_sophie.jpg',
+    'assets/demo/portrait_mina.jpg',
   ];
 
   @override
@@ -210,7 +210,7 @@ class _OfflineVideoState extends State<_OfflineVideo> {
             width: player!.value.size.width, height: player!.value.size.height,
             child: VideoPlayer(player!))),
         if (showPoster)
-          Image.network(posterUrls[widget.index % posterUrls.length],
+          Image.asset(posterUrls[widget.index % posterUrls.length],
             fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Center(
               child: Icon(Icons.pets_rounded, color: Colors.white54, size: 90))),
         if (showPoster)
