@@ -5,23 +5,18 @@ import 'package:mewvio/main.dart';
 import 'support/fake_accounts.dart';
 
 void main() {
-  testWidgets('Profile tab opens live account flow without gating demo tabs', (tester) async {
+  testWidgets('The video-first shell exposes five navigation actions', (tester) async {
     final accounts = FakeAccounts();
     addTearDown(accounts.changes.close);
     await tester.pumpWidget(MewvioApp(accounts: accounts));
-    final profileTab = tester.widget<InkWell>(find.byKey(const Key('nav-Profile')));
-    profileTab.onTap!.call();
-    await tester.pumpAndSettle();
-    await tester.scrollUntilVisible(find.byKey(const Key('account-email')), 170);
-    await tester.pumpAndSettle();
-    expect(find.byKey(const Key('account-email')), findsOneWidget);
-    expect(find.text('Create a new account'), findsOneWidget);
-    accounts.changeUser('alice');
-    await tester.pumpAndSettle();
-    expect(find.text('Alice'), findsOneWidget);
-    await tester.scrollUntilVisible(find.text('Private profile'), 200);
-    await tester.pumpAndSettle();
-    expect(find.text('Private profile'), findsOneWidget);
+    expect(find.byKey(const Key('nav-Home')), findsOneWidget);
+    expect(find.byKey(const Key('nav-Friends')), findsOneWidget);
+    expect(find.byKey(const Key('nav-Inbox')), findsOneWidget);
+    expect(find.byKey(const Key('nav-Profile')), findsOneWidget);
+    expect(find.text('Home'), findsOneWidget);
+    expect(find.text('Friends'), findsOneWidget);
+    expect(find.text('Inbox'), findsOneWidget);
+    expect(find.text('Profile'), findsOneWidget);
     await tester.pumpWidget(const SizedBox.shrink());
   });
 }
