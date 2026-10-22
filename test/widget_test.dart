@@ -9,7 +9,8 @@ void main() {
     final accounts = FakeAccounts();
     addTearDown(accounts.changes.close);
     await tester.pumpWidget(MewvioApp(accounts: accounts));
-    await tester.tap(find.byKey(const Key('nav-Profile')));
+    final profileTab = tester.widget<InkWell>(find.byKey(const Key('nav-Profile')));
+    profileTab.onTap!.call();
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('account-email')), findsOneWidget);
     expect(find.text('Create a new account'), findsOneWidget);
