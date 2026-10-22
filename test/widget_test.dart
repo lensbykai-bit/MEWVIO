@@ -17,6 +17,10 @@ void main() {
     expect(find.text('Match'), findsOneWidget);
     expect(find.text('Chat'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('nav-Profile')));
+    await tester.pumpAndSettle();
+    expect(find.text('MEWVIO Friend'), findsOneWidget);
+    expect(find.text('MEWVIO Wallet'), findsOneWidget);
     await tester.pumpWidget(const SizedBox.shrink());
   });
 }
