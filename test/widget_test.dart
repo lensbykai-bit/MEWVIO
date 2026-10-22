@@ -9,14 +9,14 @@ void main() {
     final accounts = FakeAccounts();
     addTearDown(accounts.changes.close);
     await tester.pumpWidget(MewvioApp(accounts: accounts));
-    expect(find.byKey(const Key('nav-Home')), findsOneWidget);
-    expect(find.byKey(const Key('nav-Friends')), findsOneWidget);
-    expect(find.byKey(const Key('nav-Inbox')), findsOneWidget);
-    expect(find.byKey(const Key('nav-Profile')), findsOneWidget);
-    expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Friends'), findsOneWidget);
-    expect(find.text('Inbox'), findsOneWidget);
-    expect(find.text('Profile'), findsOneWidget);
+    expect(find.byKey(const Key('nav-Vibes')), findsOneWidget);
+    expect(find.byKey(const Key('nav-Connect')), findsOneWidget);
+    expect(find.byKey(const Key('nav-Chats')), findsOneWidget);
+    expect(find.byKey(const Key('nav-Me')), findsOneWidget);
+    expect(find.text('Vibes'), findsOneWidget);
+    expect(find.text('Connect'), findsOneWidget);
+    expect(find.text('Chats'), findsOneWidget);
+    expect(find.text('Me'), findsOneWidget);
     await tester.pumpWidget(const SizedBox.shrink());
   });
 }
