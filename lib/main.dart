@@ -55,61 +55,81 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  int selected = 1;
-  final tabs = const [
-    ('Home', Icons.home_rounded),
-    ('Videos', Icons.play_circle_rounded),
-    ('Match', Icons.favorite_rounded),
-    ('Chat', Icons.chat_bubble_rounded),
-    ('Party', Icons.mic_rounded),
-    ('Profile', Icons.person_rounded),
-    ('Shop', Icons.shopping_bag_rounded)
-  ];
+  int selected = 0;
+  int? extraPage;
+
+  void openCreate() => showModalBottomSheet<void>(
+    context: context, showDragHandle: true,
+    builder: (ctx) => SafeArea(child: Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        const Icon(Icons.add_circle_outline_rounded, size: 52, color: purple),
+        const SizedBox(height: 12),
+        const Text('Create on MEWVIO', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+        const SizedBox(height: 8),
+        const Text('Video uploading is not enabled yet. This beta only plays bundled demo videos.',
+          textAlign: TextAlign.center),
+        const SizedBox(height: 14),
+        FilledButton(onPressed: () => Navigator.pop(ctx), child: const Text('Got it')),
+      ]),
+    )),
+  );
+
+  void chooseTab(int index) {
+    if (index == 2) { openCreate(); return; }
+    setState(() { selected = index; extraPage = null; });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final pages = [
-      HomePage(openTab: (index) => setState(() => selected = index)),
+    final darkScreen = selected == 0 || selected == 4;
+    final pages = <Widget>[
       const TikTokVideosPage(),
       const MatchPage(),
+      const SizedBox.shrink(),
       const ChatPage(),
-      const PartyPage(),
       AccountPage(repository: widget.accounts),
-      const MewvioShopPage(),
     ];
+    final body = extraPage == 1 ? const PartyPage()
+        : extraPage == 2 ? const MewvioShopPage() : pages[selected];
     return Scaffold(
-      backgroundColor: selected == 1 ? Colors.black : pale,
-      body: selected == 1 ? pages[selected] : SafeArea(child: pages[selected]),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          decoration: BoxDecoration(
-            color: selected == 1 ? Colors.black : Colors.white,
-            boxShadow: const [BoxShadow(color: Color(0x18000000), blurRadius: 15)],
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 7),
-          child: Row(
-            children: List.generate(tabs.length, (index) {
-              final active = selected == index;
-              return Expanded(
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: () => setState(() => selected = index),
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(tabs[index].$2, size: 23, color: selected == 1 ? (active ? Colors.white : Colors.white54) : (active ? purple : Colors.blueGrey.shade300)),
-                    const SizedBox(height: 4),
-                    Text(tabs[index].$1, style: TextStyle(
-                      fontSize: 10, fontWeight: active ? FontWeight.bold : FontWeight.normal,
-                      color: selected == 1 ? (active ? Colors.white : Colors.white54) : (active ? purple : Colors.blueGrey.shade400),
-                    )),
-                  ]),
-                ),
-              );
-            }),
-          ),
-        ),
-      ),
+      backgroundColor: darkScreen && extraPage == null ? Colors.black : pale,
+      body: extraPage == null && selected == 0 ? body : SafeArea(child: body),
+      bottomNavigationBar: SafeArea(top: false, child: Container(
+        color: darkScreen && extraPage == null ? Colors.black : const Color(0xFF151515),
+        padding: const EdgeInsets.symmetric(vertical: 7),
+        child: Row(children: [
+          _navItem(0, 'Home', Icons.home_outlined, Icons.home_rounded),
+          _navItem(1, 'Friends', Icons.people_outline_rounded, Icons.people_rounded),
+          Expanded(child: Center(child: InkWell(
+            onTap: openCreate, borderRadius: BorderRadius.circular(9),
+            child: Container(width: 51, height: 34,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),
+                gradient: const LinearGradient(colors: [Color(0xFF28CEE2), Colors.white, Color(0xFFF3539B)])),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              child: const DecoratedBox(decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: Icon(Icons.add_rounded, color: Colors.black, size: 28)),
+            ),
+          ))),
+          _navItem(3, 'Inbox', Icons.chat_bubble_outline_rounded, Icons.chat_bubble_rounded),
+          _navItem(4, 'Profile', Icons.person_outline_rounded, Icons.person_rounded),
+        ]),
+      )),
     );
+  }
+
+  Widget _navItem(int index, String label, IconData normal, IconData activeIcon) {
+    final active = selected == index && extraPage == null;
+    return Expanded(child: InkWell(
+      onTap: () => chooseTab(index),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Icon(active ? activeIcon : normal, color: active ? Colors.white : Colors.white60, size: 27),
+        const SizedBox(height: 3),
+        Text(label, style: TextStyle(color: active ? Colors.white : Colors.white60,
+          fontSize: 11, fontWeight: active ? FontWeight.w800 : FontWeight.w500)),
+      ]),
+    ));
   }
 }
 
