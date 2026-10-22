@@ -105,7 +105,7 @@ class _MainShellState extends State<MainShell> {
     return Scaffold(
       backgroundColor: darkScreen && extraPage == null ? Colors.black : pale,
       body: extraPage == null && selected == 0 ? body : SafeArea(child: body),
-      bottomNavigationBar: SafeArea(top: false, child: Container(
+      bottomNavigationBar: SafeArea(top: false, child: SizedBox(height: 62, child: Container(
         color: darkScreen && extraPage == null ? Colors.black : const Color(0xFF151515),
         padding: const EdgeInsets.symmetric(vertical: 7),
         child: Row(children: [
@@ -125,7 +125,7 @@ class _MainShellState extends State<MainShell> {
           _navItem(3, 'Inbox', Icons.chat_bubble_outline_rounded, Icons.chat_bubble_rounded),
           _navItem(4, 'Profile', Icons.person_outline_rounded, Icons.person_rounded),
         ]),
-      )),
+      ))),
     );
   }
 
