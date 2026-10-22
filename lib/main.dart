@@ -70,7 +70,17 @@ class _MainShellState extends State<MainShell> {
         const Text('Video uploading is not enabled yet. This beta only plays bundled demo videos.',
           textAlign: TextAlign.center),
         const SizedBox(height: 14),
-        FilledButton(onPressed: () => Navigator.pop(ctx), child: const Text('Got it')),
+        Wrap(alignment: WrapAlignment.center, spacing: 10, children: [
+          OutlinedButton.icon(onPressed: () {
+            Navigator.pop(ctx);
+            setState(() => extraPage = 1);
+          }, icon: const Icon(Icons.mic_rounded), label: const Text('Voice Party demo')),
+          OutlinedButton.icon(onPressed: () {
+            Navigator.pop(ctx);
+            setState(() => extraPage = 2);
+          }, icon: const Icon(Icons.shopping_bag_outlined), label: const Text('Shop preview')),
+        ]),
+        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close')),
       ]),
     )),
   );
