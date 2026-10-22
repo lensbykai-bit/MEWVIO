@@ -4,6 +4,7 @@ import 'account/account_page.dart';
 import 'account/account_repository.dart';
 import 'tiktok_video_page.dart';
 import 'mewvio_shop_page.dart';
+import 'mewvio_wallet_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
 
@@ -65,7 +66,7 @@ class _MainShellState extends State<MainShell> {
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         const Icon(Icons.add_circle_outline_rounded, size: 52, color: purple),
         const SizedBox(height: 12),
-        const Text('Create on MEWVIO', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+        const Text('MEWVIO Hub', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
         const SizedBox(height: 8),
         const Text('Video uploading is not enabled yet. This beta only plays bundled demo videos.',
           textAlign: TextAlign.center),
@@ -80,10 +81,13 @@ class _MainShellState extends State<MainShell> {
             setState(() => extraPage = 2);
           }, icon: const Icon(Icons.shopping_bag_outlined), label: const Text('Shop preview')),
         ]),
+        OutlinedButton.icon(onPressed: () { Navigator.pop(ctx); openWallet(); }, icon: const Icon(Icons.account_balance_wallet_outlined), label: const Text('MEWVIO Wallet')),
         TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close')),
       ]),
     )),
   );
+
+  void openWallet() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const MewvioWalletPage()));
 
   void chooseTab(int index) {
     if (index == 2) { openCreate(); return; }
@@ -106,24 +110,24 @@ class _MainShellState extends State<MainShell> {
       backgroundColor: darkScreen && extraPage == null ? Colors.black : pale,
       body: extraPage == null && selected == 0 ? body : SafeArea(child: body),
       bottomNavigationBar: SafeArea(top: false, child: SizedBox(height: 62, child: Container(
-        color: darkScreen && extraPage == null ? Colors.black : const Color(0xFF151515),
+        decoration: const BoxDecoration(color: Color(0xFF10101D), border: Border(top: BorderSide(color: Color(0xFF302447)))),
         padding: const EdgeInsets.symmetric(vertical: 7),
         child: Row(children: [
-          _navItem(0, 'Home', Icons.home_outlined, Icons.home_rounded),
-          _navItem(1, 'Friends', Icons.people_outline_rounded, Icons.people_rounded),
+          _navItem(0, 'Vibes', Icons.play_circle_outline_rounded, Icons.play_circle_filled_rounded),
+          _navItem(1, 'Connect', Icons.people_outline_rounded, Icons.people_rounded),
           Expanded(child: Center(child: InkWell(
             onTap: openCreate, borderRadius: BorderRadius.circular(9),
             child: Container(width: 51, height: 34,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),
-                gradient: const LinearGradient(colors: [Color(0xFF28CEE2), Colors.white, Color(0xFFF3539B)])),
+                gradient: const LinearGradient(colors: [Color(0xFF4ACFE8), Color(0xFF9A5FEA), Color(0xFFF353AB)])),
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               child: const DecoratedBox(decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(5))),
-                child: Icon(Icons.add_rounded, color: Colors.black, size: 28)),
+                color: Color(0xFF171325), borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: Icon(Icons.pets_rounded, color: Colors.white, size: 26)),
             ),
           ))),
-          _navItem(3, 'Inbox', Icons.chat_bubble_outline_rounded, Icons.chat_bubble_rounded),
-          _navItem(4, 'Profile', Icons.person_outline_rounded, Icons.person_rounded),
+          _navItem(3, 'Chats', Icons.chat_bubble_outline_rounded, Icons.chat_bubble_rounded),
+          _navItem(4, 'Me', Icons.person_outline_rounded, Icons.person_rounded),
         ]),
       ))),
     );
