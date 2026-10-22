@@ -26,6 +26,7 @@ flutter:
   assets:
     - assets/images/mewvio-cat.svg
     - assets/videos/
+    - assets/demo/
 
 flutter_launcher_icons:
   android: true
