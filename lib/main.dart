@@ -453,16 +453,38 @@ class _MatchPageState extends State<MatchPage> {
       const SizedBox(height:24),
       const Text('People to discover',style:TextStyle(color:Colors.white,fontSize:19,fontWeight:FontWeight.bold)),
       const SizedBox(height:12),
-      SizedBox(height:170,child:ListView(scrollDirection:Axis.horizontal,children:[
-        for (final person in people) Container(width:133,margin:const EdgeInsets.only(right:11),
-          padding:const EdgeInsets.all(12),decoration:BoxDecoration(color:const Color(0xFF211A38),borderRadius:BorderRadius.circular(19)),
-          child:Column(children:[
-            CircleAvatar(radius:29,backgroundColor:const Color(0xFF594292),child:Text(person.$2,style:const TextStyle(fontSize:29))),
-            const SizedBox(height:10),
-            Text(person.$1,style:const TextStyle(color:Colors.white,fontWeight:FontWeight.bold)),
-            Text(person.$3,textAlign:TextAlign.center,style:const TextStyle(color:Colors.white60,fontSize:11)),
-            TextButton(onPressed:()=>notice('Matching is unavailable in this demo.'),child:const Text('Explore')),
-          ])),
+      SizedBox(height:205,child:ListView(scrollDirection:Axis.horizontal,children:[
+        for (var i = 0; i < people.length; i++) InkWell(
+          onTap: () => notice('These are illustrative demo profiles; no live matching.'),
+          child: Container(width:146,margin:const EdgeInsets.only(right:11),
+            clipBehavior:Clip.antiAlias,
+            decoration:BoxDecoration(
+              gradient:const LinearGradient(colors:[Color(0xFF594292),Color(0xFFEA55AC)]),
+              borderRadius:BorderRadius.circular(19)),
+            child:Stack(fit:StackFit.expand,children:[
+              Image.network([
+                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=350&q=70',
+                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=350&q=70',
+                'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=350&q=70',
+                'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=350&q=70',
+              ][i],fit:BoxFit.cover,errorBuilder:(_,__,___)=>Center(
+                child:Text(people[i].$2,style:const TextStyle(fontSize:48)))),
+              const DecoratedBox(decoration:BoxDecoration(gradient:LinearGradient(
+                begin:Alignment.topCenter,end:Alignment.bottomCenter,
+                colors:[Colors.transparent,Color(0xE5000015)]))),
+              Positioned(left:11,right:5,bottom:11,child:Column(
+                crossAxisAlignment:CrossAxisAlignment.start,children:[
+                  Text(people[i].$1,style:const TextStyle(
+                    color:Colors.white,fontSize:18,fontWeight:FontWeight.w900)),
+                  const SizedBox(height:4),
+                  Text(people[i].$3,style:const TextStyle(
+                    color:Colors.white70,fontSize:11)),
+                  const SizedBox(height:4),
+                  const Text('Preview • Not online',style:TextStyle(
+                    color:Color(0xFFC1E9FF),fontSize:10)),
+                ])),
+            ]),
+          )),
       ])),
       const SizedBox(height:23),
       const Text('Find friends by interests',style:TextStyle(color:Colors.white,fontSize:19,fontWeight:FontWeight.bold)),
@@ -596,19 +618,42 @@ class _PartyPageState extends State<PartyPage> {
       const SizedBox(height:20),
       const Text('Explore rooms',style:TextStyle(color:Colors.white,fontWeight:FontWeight.bold,fontSize:19)),
       const SizedBox(height:12),
-      GridView.builder(shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),itemCount:rooms.length,
-        gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:2,crossAxisSpacing:10,mainAxisSpacing:10,childAspectRatio:1.16),
-        itemBuilder:(context,i)=>InkWell(onTap:()=>setState((){roomIndex=i;muted=true;}),
-          child:Container(padding:const EdgeInsets.all(13),decoration:BoxDecoration(
-            borderRadius:BorderRadius.circular(18),color:const Color(0xFF201B3A),
-            border:Border.all(color:roomIndex==i?pink:Colors.white12)),
-            child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[
-              Text(rooms[i].$2,style:const TextStyle(fontSize:31)),
-              const SizedBox(height:9),
-              Text(rooms[i].$1,style:const TextStyle(color:Colors.white,fontWeight:FontWeight.bold)),
-              const SizedBox(height:4),
-              Text(rooms[i].$3,textAlign:TextAlign.center,style:const TextStyle(color:Colors.white60,fontSize:11)),
-            ])))),
+      GridView.builder(shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),
+        itemCount:rooms.length,
+        gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:2,crossAxisSpacing:10,mainAxisSpacing:10,childAspectRatio:.98),
+        itemBuilder:(context,i)=>InkWell(
+          onTap:()=>setState((){roomIndex=i;muted=true;}),
+          child:Container(clipBehavior:Clip.antiAlias,decoration:BoxDecoration(
+            borderRadius:BorderRadius.circular(18),
+            border:Border.all(color:roomIndex==i?pink:Colors.white24,width:1.5),
+            gradient:const LinearGradient(colors:[Color(0xFF24134C),Color(0xFF592979)])),
+            child:Stack(fit:StackFit.expand,children:[
+              Image.network([
+                'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&q=65',
+                'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=65',
+                'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=400&q=65',
+                'https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=400&q=65',
+              ][i],fit:BoxFit.cover,errorBuilder:(_,__,___)=>
+                Center(child:Text(rooms[i].$2,style:const TextStyle(fontSize:42)))),
+              const DecoratedBox(decoration:BoxDecoration(gradient:LinearGradient(
+                begin:Alignment.topCenter,end:Alignment.bottomCenter,
+                colors:[Color(0x220B0926),Color(0xE60B0926)]))),
+              Positioned(left:10,right:6,bottom:13,child:Column(
+                crossAxisAlignment:CrossAxisAlignment.start,children:[
+                  Text(rooms[i].$2,style:const TextStyle(fontSize:24)),
+                  const SizedBox(height:5),
+                  Text(rooms[i].$1,style:const TextStyle(
+                    color:Colors.white,fontWeight:FontWeight.bold,fontSize:15)),
+                  const SizedBox(height:3),
+                  Text(rooms[i].$3,style:const TextStyle(
+                    color:Colors.white70,fontSize:11)),
+                  const SizedBox(height:4),
+                  const Text('DEMO ROOM',style:TextStyle(
+                    color:Color(0xFFC79EFF),fontSize:9,fontWeight:FontWeight.w800)),
+                ])),
+            ]))),
+      ),
       const SizedBox(height:20),
       if(roomIndex!=null) Container(padding:const EdgeInsets.all(18),decoration:BoxDecoration(
         color:const Color(0xFF292046),borderRadius:BorderRadius.circular(18)),
