@@ -462,11 +462,11 @@ class _MatchPageState extends State<MatchPage> {
               gradient:const LinearGradient(colors:[Color(0xFF594292),Color(0xFFEA55AC)]),
               borderRadius:BorderRadius.circular(19)),
             child:Stack(fit:StackFit.expand,children:[
-              Image.network([
-                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=350&q=70',
-                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=350&q=70',
-                'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=350&q=70',
-                'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=350&q=70',
+              Image.asset([
+                'assets/demo/portrait_sophie.jpg',
+                'assets/demo/portrait_kai.jpg',
+                'assets/demo/portrait_luna.jpg',
+                'assets/demo/portrait_kai.jpg',
               ][i],fit:BoxFit.cover,errorBuilder:(_,__,___)=>Center(
                 child:Text(people[i].$2,style:const TextStyle(fontSize:48)))),
               const DecoratedBox(decoration:BoxDecoration(gradient:LinearGradient(
@@ -629,11 +629,11 @@ class _PartyPageState extends State<PartyPage> {
             border:Border.all(color:roomIndex==i?pink:Colors.white24,width:1.5),
             gradient:const LinearGradient(colors:[Color(0xFF24134C),Color(0xFF592979)])),
             child:Stack(fit:StackFit.expand,children:[
-              Image.network([
-                'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&q=65',
-                'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=65',
-                'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=400&q=65',
-                'https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=400&q=65',
+              Image.asset([
+                'assets/demo/chill.jpg',
+                'assets/demo/music.jpg',
+                'assets/demo/gaming.jpg',
+                'assets/demo/stars.jpg',
               ][i],fit:BoxFit.cover,errorBuilder:(_,__,___)=>
                 Center(child:Text(rooms[i].$2,style:const TextStyle(fontSize:42)))),
               const DecoratedBox(decoration:BoxDecoration(gradient:LinearGradient(
