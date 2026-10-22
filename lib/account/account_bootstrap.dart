@@ -46,7 +46,7 @@ class _AccountBootstrapState extends State<AccountBootstrap> {
             defaultValue: 'https://swbsevzhudttiwwlcdwl.supabase.co'),
         publishableKey: const String.fromEnvironment('SUPABASE_PUBLISHABLE_KEY',
             defaultValue: 'sb_publishable_2GgGavPqGxSlpqfnqcQJ0Q_fG2DzelS'),
-      );
+      ).timeout(const Duration(seconds: 4));
       return SupabaseAccountRepository(Supabase.instance.client);
     } catch (error) {
       debugPrint('MEWVIO account service initialization failed: ${error.runtimeType}');
