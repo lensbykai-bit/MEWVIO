@@ -582,8 +582,8 @@ class _ProfileViewState extends State<_ProfileView> {
             icon: const Icon(Icons.logout), label: const Text('Sign out'),
           ),
           const SizedBox(height: 12),
-          const Text('Chat, matching, voice rooms and shopping are demo features.\nMEWVIO v0.1.9',
-              textAlign: TextAlign.center, style: TextStyle(color: Colors.grey, fontSize: 12)),
+          const Text('© 2026 MEWVIO Technologies. All rights reserved.',
+              textAlign: TextAlign.center, style: TextStyle(color: Colors.grey, fontSize: 11)),
         ],
       );
 }
