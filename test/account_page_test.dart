@@ -67,6 +67,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(accounts.signInCalls, 1);
     expect(find.text('Alice'), findsOneWidget);
+    expect(find.text('© 2026 MEWVIO Technologies. All rights reserved.'), findsOneWidget);
     await tester.tap(find.text('Edit profile'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(const Key('profile-name')), 'Alice Updated');
