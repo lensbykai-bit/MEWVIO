@@ -21,7 +21,10 @@ void main() {
     expect(find.text('Chat'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
     await tester.tap(find.byKey(const Key('nav-Create')));
-    await tester.pumpAndSettle();
+    // Real camera initialization may remain pending without a native device.
+    // Advance route animation without waiting for camera frames to settle.
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
     expect(find.byType(MewvioCreatorPage), findsOneWidget);
     expect(find.text('PHOTO'), findsOneWidget);
     expect(find.text('TEXT'), findsOneWidget);
