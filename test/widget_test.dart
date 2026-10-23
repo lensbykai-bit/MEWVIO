@@ -24,7 +24,7 @@ void main() {
     expect(find.text('MEWVIO Hub'), findsOneWidget);
     expect(find.text('Post • Home'), findsOneWidget);
     expect(find.text('Voice Party demo'), findsOneWidget);
-    await tester.pageBack();
+    Navigator.of(tester.element(find.byType(MainShell))).pop();
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('nav-Profile')));
     await tester.pumpAndSettle();
