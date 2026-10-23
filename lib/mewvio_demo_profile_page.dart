@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'mewvio_wallet_page.dart';
 
 const _background = Color(0xFF0B091A);
 const _surface = Color(0xFF211831);
 const _pink = Color(0xFFF050BB);
 const _violet = Color(0xFF8052F4);
-const _cyan = Color(0xFF53D7ED);
 
 /// The public demo profile has no account, user, financial or social backend.
 /// Sample images and counts are previews, never claimed as real user activity.
@@ -29,9 +27,6 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
     'assets/demo/portrait_luna.jpg',
     'assets/demo/hero_sunset.jpg',
   ];
-
-  void openWallet() => Navigator.push(context,
-    MaterialPageRoute<void>(builder: (_) => const MewvioWalletPage()));
 
   void editDemo() {
     final name = TextEditingController(text: displayName);
@@ -76,10 +71,6 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
         const Text('MEWVIO Space', style: TextStyle(
           color: Colors.white, fontSize: 23, fontWeight: FontWeight.w900)),
         const SizedBox(height: 7),
-        _menuItem(Icons.account_balance_wallet_rounded,
-          'MEWVIO Wallet', () { Navigator.pop(sheet); openWallet(); }),
-        _menuItem(Icons.diamond_rounded, 'Diamonds shop (demo)',
-          () { Navigator.pop(sheet); openWallet(); }),
         _menuItem(Icons.movie_filter_outlined, 'Creator Studio',
           () { Navigator.pop(sheet); _notice('Creator Studio is coming soon.'); }),
         _menuItem(Icons.shield_outlined, 'Settings & Safety',
@@ -127,8 +118,6 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
           const Text('MEWVIO', style: TextStyle(color: Colors.white,
             fontSize: 21, fontWeight: FontWeight.w900)),
           const Spacer(),
-          IconButton(tooltip: 'MEWVIO Wallet', onPressed: openWallet,
-            icon: const Icon(Icons.diamond_outlined, color: _cyan)),
           IconButton(tooltip: 'MEWVIO menu', onPressed: openMenu,
             icon: const Icon(Icons.menu_rounded, color: Colors.white)),
         ])),
@@ -166,27 +155,6 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
             Chip(label: Text('💜 Friends')),
           ]),
           const SizedBox(height: 12),
-          InkWell(onTap: openWallet, child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 15),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [
-                Color(0xFF572073), Color(0xFF272367), Color(0xFF283A86)]),
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: const Color(0xFF7651C8))),
-            child: const Row(children: [
-              Icon(Icons.account_balance_wallet_rounded, color: Colors.amber, size: 28),
-              SizedBox(width: 10),
-              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('MEWVIO Wallet', style: TextStyle(color: Colors.white,
-                  fontWeight: FontWeight.bold)),
-                Text('0 Coins · Demo', style: TextStyle(color: Colors.white70,
-                  fontSize: 11)),
-              ])),
-              Text('Explore', style: TextStyle(color: _cyan,
-                fontWeight: FontWeight.bold)),
-              Icon(Icons.chevron_right_rounded, color: _cyan),
-            ]),
-          )),
           const SizedBox(height: 14),
           Row(children: [
             for (var i = 0; i < 3; i++)
