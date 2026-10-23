@@ -21,7 +21,12 @@ void main() {
     await tester.tap(find.byKey(const Key('nav-Profile')));
     await tester.pumpAndSettle();
     expect(find.text('MEWVIO Friend'), findsOneWidget);
-    expect(find.text('MEWVIO Wallet'), findsOneWidget);
+    expect(find.text('MEWVIO Wallet'), findsNothing);
+    expect(find.byTooltip('MEWVIO Wallet'), findsNothing);
+    await tester.tap(find.byTooltip('MEWVIO menu'));
+    await tester.pumpAndSettle();
+    expect(find.text('MEWVIO Wallet'), findsNothing);
+    expect(find.text('Diamonds shop (demo)'), findsNothing);
     await tester.pumpWidget(const SizedBox.shrink());
   });
 }
