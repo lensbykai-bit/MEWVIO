@@ -29,6 +29,14 @@ void main() {
     await tester.tap(find.byKey(const Key('nav-Profile')));
     await tester.pumpAndSettle();
     expect(find.text('MEWVIO Friend'), findsOneWidget);
+    await tester.tap(find.text('Edit profile'));
+    await tester.pumpAndSettle();
+    expect(find.text('Profile Photo'), findsOneWidget);
+    expect(find.text('Cover Photo'), findsOneWidget);
+    expect(find.byKey(const Key('pick-avatar-photo')), findsOneWidget);
+    expect(find.byKey(const Key('pick-cover-photo')), findsOneWidget);
+    Navigator.of(tester.element(find.byType(MainShell))).pop();
+    await tester.pumpAndSettle();
     // The profile copyright is below the lazily built photo grid; parity checks
     // validate the footer in the guest and signed-in profile source files.
     expect(find.text('MEWVIO Wallet'), findsNothing);
