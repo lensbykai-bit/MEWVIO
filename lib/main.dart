@@ -4,6 +4,7 @@ import 'account/account_page.dart';
 import 'account/account_repository.dart';
 import 'tiktok_video_page.dart';
 import 'social_home_page.dart';
+import 'mewvio_creator_page.dart';
 import 'mewvio_demo_profile_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
@@ -59,37 +60,10 @@ class _MainShellState extends State<MainShell> {
   int selected = 0;
   int? extraPage;
 
-  void openCreate() => showModalBottomSheet<void>(
-    context: context, showDragHandle: true,
-    isScrollControlled: true,
-    builder: (ctx) => SafeArea(child: SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        const Icon(Icons.add_circle_outline_rounded, size: 52, color: purple),
-        const SizedBox(height: 12),
-        const Text('MEWVIO Hub', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
-        const SizedBox(height: 8),
-        const Text('Create a local preview post on Home, explore demo videos, or open a voice room preview. Video uploading is not available yet.',
-          textAlign: TextAlign.center),
-        const SizedBox(height: 14),
-        Wrap(alignment: WrapAlignment.center, spacing: 10, runSpacing: 8, children: [
-          OutlinedButton.icon(onPressed: () {
-            Navigator.pop(ctx);
-            setState(() { selected = 0; extraPage = null; });
-          }, icon: const Icon(Icons.edit_note_rounded), label: const Text('Post • Home')),
-          OutlinedButton.icon(onPressed: () {
-            Navigator.pop(ctx);
-            setState(() { selected = 1; extraPage = null; });
-          }, icon: const Icon(Icons.play_circle_outline_rounded), label: const Text('Videos')),
-          OutlinedButton.icon(onPressed: () {
-            Navigator.pop(ctx);
-            setState(() => extraPage = 1);
-          }, icon: const Icon(Icons.mic_rounded), label: const Text('Voice Party demo')),
-        ]),
-        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close')),
-      ]),
-    )),
-  );
+  void openCreate() {
+    Navigator.push(context, MaterialPageRoute<void>(
+      builder: (_) => const MewvioCreatorPage()));
+  }
 
   void chooseTab(int index) {
     if (index == 2) { openCreate(); return; }
