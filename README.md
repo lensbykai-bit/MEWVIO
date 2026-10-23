@@ -55,3 +55,7 @@ The Android and responsive website now share the same official kitten SVG, dark 
 The native Flutter account registration/private profile functions still use Supabase; the static GitHub Pages web preview does **not** provide equivalent login or realtime social networking. Matching the visual UI does not imply backend parity, paid gifting, functional live voice, real uploads, public messaging, or unified accounts. Never display sample people/posts as real users. Implement age-appropriate safety, reporting and moderation before enabling user-generated content.
 
 Android version: `0.6.0+22`. CI APK artifact: `MEWVIO-Social-v0.6.0-Unified-App-Web-APK`. Web deployments run `scripts/check_web_parity.js` before publishing.
+
+## 0.6.1 Android creator hub layout fix
+
+The native center-plus creator bottom sheet now scrolls inside available screen space, including smaller Android screens. The Flutter widget test dismisses the route using Navigator. Web and Android still share the same five primary mobile navigation destinations, artwork reference and copyright statement. App and Web are UI-aligned demos, not a shared production backend.
