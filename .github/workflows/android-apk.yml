@@ -96,7 +96,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: MEWVIO-v0.1.9-Accounts-Beta-APK
+          name: MEWVIO-Social-v0.5.0-Beta-APK
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 30
