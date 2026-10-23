@@ -1,12 +1,12 @@
 # MEWVIO 🐱💜
 
-MEWVIO is a Flutter Android social app beta with Supabase email/password accounts and private profiles.
+MEWVIO Social is an Android-first Flutter social network beta combining original, demo-inspired short videos, matching, voice rooms, chat, feed and communities. Its visual design is original, not a clone of other companies' assets.
 
-Registration, login, session restoration, profile editing and logout connect to Supabase. Profiles are visible only to their owner. The gallery cover-photo picker remains a local preview and does not upload photos. Chat, matching, voice rooms, videos and shopping remain demo features.
+Registration, login, session restoration, profile editing and logout connect to Supabase. Profiles are visible only to their owner. The gallery cover-photo picker remains a local preview and does not upload photos. The new home feed provides demo posts, local comments and follows, safe sample groups, and entrypoints to bundled offline short videos, matching and voice rooms. Chat, live streaming, public communities, upload, real users and shopping are not server-connected in this beta.
 
 ## Build Android APK
 
-Push commits to `main` or run **Actions → Build MEWVIO Android APK → Run workflow**. When build succeeds, download the APK artifact from the workflow run.
+Push commits to `main` or run **Actions → Build MEWVIO Android APK → Run workflow**. When build succeeds, download the `MEWVIO-Social-v0.5.0-Beta-APK` artifact ZIP from the workflow run. Extract `app-release.apk` and install it on Android. This build uses the repository's existing debug/release configuration and is intended for beta testing, not public store distribution.
 
 ## Local setup
 
