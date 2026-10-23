@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 const _bg = Color(0xFF090F22);
 const _panel = Color(0xFF141C36);
@@ -280,10 +281,11 @@ class _SocialHomePageState extends State<SocialHomePage> {
 
   Widget _header() => Row(children: [
     Container(width: 41, height: 41,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        gradient: const LinearGradient(colors: [_cyan, _purple, _pink])),
-      child: const Icon(Icons.pets_rounded, color: _bg, size: 26)),
+        border: Border.all(color: _cyan, width: 1.2)),
+      child: SvgPicture.asset('assets/images/mewvio-cat.svg', fit: BoxFit.cover)),
     const SizedBox(width: 10),
     const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text('MEWVIO', style: TextStyle(color: _white,
