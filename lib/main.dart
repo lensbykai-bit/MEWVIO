@@ -68,10 +68,18 @@ class _MainShellState extends State<MainShell> {
         const SizedBox(height: 12),
         const Text('MEWVIO Hub', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
         const SizedBox(height: 8),
-        const Text('Video uploading is not enabled yet. This beta only plays bundled demo videos.',
+        const Text('Create a local preview post on Home, explore demo videos, or open a voice room preview. Video uploading is not available yet.',
           textAlign: TextAlign.center),
         const SizedBox(height: 14),
-        Wrap(alignment: WrapAlignment.center, spacing: 10, children: [
+        Wrap(alignment: WrapAlignment.center, spacing: 10, runSpacing: 8, children: [
+          OutlinedButton.icon(onPressed: () {
+            Navigator.pop(ctx);
+            setState(() { selected = 0; extraPage = null; });
+          }, icon: const Icon(Icons.edit_note_rounded), label: const Text('Post • Home')),
+          OutlinedButton.icon(onPressed: () {
+            Navigator.pop(ctx);
+            setState(() { selected = 1; extraPage = null; });
+          }, icon: const Icon(Icons.play_circle_outline_rounded), label: const Text('Videos')),
           OutlinedButton.icon(onPressed: () {
             Navigator.pop(ctx);
             setState(() => extraPage = 1);
