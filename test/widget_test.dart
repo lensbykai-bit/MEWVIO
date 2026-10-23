@@ -11,6 +11,7 @@ void main() {
     await tester.pumpWidget(MewvioApp(accounts: accounts));
     expect(find.byKey(const Key('nav-Home')), findsOneWidget);
     expect(find.byKey(const Key('nav-Videos')), findsOneWidget);
+    expect(find.byKey(const Key('nav-Create')), findsOneWidget);
     expect(find.byKey(const Key('nav-Chat')), findsOneWidget);
     expect(find.byKey(const Key('nav-Profile')), findsOneWidget);
     expect(find.text('Home'), findsOneWidget);
@@ -18,6 +19,13 @@ void main() {
     expect(find.text('Videos'), findsWidgets);
     expect(find.text('Chat'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('nav-Create')));
+    await tester.pumpAndSettle();
+    expect(find.text('MEWVIO Hub'), findsOneWidget);
+    expect(find.text('Post • Home'), findsOneWidget);
+    expect(find.text('Voice Party demo'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('nav-Profile')));
     await tester.pumpAndSettle();
     expect(find.text('MEWVIO Friend'), findsOneWidget);
