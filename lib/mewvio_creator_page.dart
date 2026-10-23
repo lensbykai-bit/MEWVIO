@@ -467,10 +467,13 @@ class _CreatorVideoEditorState extends State<CreatorVideoEditor> {
     try {
       var path = widget.video.path;
       if (trimmed) {
-        final result = await trimmer.saveTrimmedVideo(
-          startValue: start, endValue: end);
-        if (result == null) throw StateError('Trim produced no file');
-        path = result;
+        if (end <= start) throw StateError('Choose a valid trim range.');
+        String? trimmedPath;
+        await trimmer.saveTrimmedVideo(
+          startValue: start, endValue: end,
+          onSave: (outputPath) => trimmedPath = outputPath);
+        if (trimmedPath == null) throw StateError('Trim produced no file');
+        path = trimmedPath!;
       }
       await Gal.putVideo(path);
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(
