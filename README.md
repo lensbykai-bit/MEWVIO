@@ -39,3 +39,7 @@ The repository homepage `index.html` is now the responsive MEWVIO Social web fro
 **Online deployment:** `.github/workflows/pages.yml` deploys the static site from the default branch to GitHub Pages. In the repository, set **Settings → Pages → Build and deployment → Source: GitHub Actions** to enable it if not already enabled. The standard Pages address, after successful deployment, is `https://lensbykai-bit.github.io/MEWVIO/`. Confirm deployment status in the Actions tab; committing HTML alone does not guarantee a published website.
 
 **Limits:** This website is a public frontend beta, not a production social network. Posts, chat messages, likes and follows are demos/browser-local; there is no real user sync, auth, media hosting, live voice or moderation backend wired into this web page. The Flutter Android prototype's private Supabase profiles are separate and must not be exposed. Implement privacy controls, blocking/reporting, moderation and production-grade authorization before inviting real users.
+
+## MEWVIO Social Android 0.5.1
+
+Removed all MEWVIO Wallet and demo diamond-shop navigation from Android guest profile, signed-in account menu, and the global create menu. The profile now displays Posts / Likes / Saved below interest chips without the wallet card. The inactive wallet/shop Dart files remain in the repository only for version history and are no longer imported by the running app. CI builds `MEWVIO-Social-v0.5.1-No-Wallet-APK`. No backend financial service is available.
