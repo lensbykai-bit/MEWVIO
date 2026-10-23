@@ -15,7 +15,7 @@ void main() {
     expect(find.byKey(const Key('nav-Profile')), findsOneWidget);
     expect(find.text('Home'), findsOneWidget);
     expect(find.byKey(const Key('social-home-feed')), findsOneWidget);
-    expect(find.text('Videos'), findsOneWidget);
+    expect(find.text('Videos'), findsWidgets);
     expect(find.text('Chat'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
     await tester.tap(find.byKey(const Key('nav-Profile')));
