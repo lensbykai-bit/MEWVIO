@@ -65,6 +65,9 @@ jobs:
       - name: Enable release APK network access
         run: python3 scripts/configure_android_network.py
 
+      - name: Configure creator Camera and Gallery permissions
+        run: python3 scripts/configure_android_media.py
+
       - name: Generate bundled offline video samples
         run: bash scripts/generate_demo_videos.sh
 
