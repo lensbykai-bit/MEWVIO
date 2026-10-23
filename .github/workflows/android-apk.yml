@@ -96,7 +96,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: MEWVIO-Social-v0.5.2-Copyright-APK
+          name: MEWVIO-Social-v0.5.3-App-Web-APK
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 30
