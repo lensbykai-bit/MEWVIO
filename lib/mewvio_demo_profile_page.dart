@@ -204,9 +204,9 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
               style: const TextStyle(color: Colors.white70)),
           ])),
       const Padding(padding: EdgeInsets.fromLTRB(18, 10, 18, 24),
-        child: Text('SAMPLE PROFILE · Photos are illustrative, not user uploads',
+        child: Text('© 2026 MEWVIO Technologies. All rights reserved.',
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white38, fontSize: 10))),
+          style: TextStyle(color: Colors.white60, fontSize: 11, letterSpacing: .2))),
     ]),
   );
 }
