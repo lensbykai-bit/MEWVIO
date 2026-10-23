@@ -599,7 +599,7 @@ class _SocialHomePageState extends State<SocialHomePage> {
           const Text('Sample community • no real members',
             style: TextStyle(color: Colors.white38, fontSize: 10)),
         ]),
-      )),
+      ),
       TextButton(
         onPressed: () => setState(() =>
           joined.contains(name) ? joined.remove(name) : joined.add(name)),
