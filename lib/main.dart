@@ -61,7 +61,8 @@ class _MainShellState extends State<MainShell> {
 
   void openCreate() => showModalBottomSheet<void>(
     context: context, showDragHandle: true,
-    builder: (ctx) => SafeArea(child: Padding(
+    isScrollControlled: true,
+    builder: (ctx) => SafeArea(child: SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         const Icon(Icons.add_circle_outline_rounded, size: 52, color: purple),
