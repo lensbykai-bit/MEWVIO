@@ -3,6 +3,7 @@ import 'account/account_bootstrap.dart';
 import 'account/account_page.dart';
 import 'account/account_repository.dart';
 import 'tiktok_video_page.dart';
+import 'social_home_page.dart';
 import 'mewvio_shop_page.dart';
 import 'mewvio_wallet_page.dart';
 import 'mewvio_demo_profile_page.dart';
@@ -99,8 +100,14 @@ class _MainShellState extends State<MainShell> {
   Widget build(BuildContext context) {
     final darkScreen = selected == 0 || selected == 1 || selected == 4;
     final pages = <Widget>[
+      SocialHomePage(
+        onVideos: () => chooseTab(1),
+        onMatch: () => setState(() => extraPage = 3),
+        onVoice: () => setState(() => extraPage = 1),
+        onChat: () => chooseTab(3),
+        onCreate: openCreate,
+      ),
       const TikTokVideosPage(),
-      const MatchPage(),
       const SizedBox.shrink(),
       const ChatPage(),
       widget.accounts.currentSession == null
@@ -113,7 +120,8 @@ class _MainShellState extends State<MainShell> {
           : AccountPage(repository: widget.accounts),
     ];
     final body = extraPage == 1 ? const PartyPage()
-        : extraPage == 2 ? const MewvioShopPage() : pages[selected];
+        : extraPage == 2 ? const MewvioShopPage()
+        : extraPage == 3 ? const MatchPage() : pages[selected];
     return Scaffold(
       backgroundColor: darkScreen && extraPage == null ? Colors.black : pale,
       body: extraPage == null && selected == 0 ? body : SafeArea(child: body),
@@ -122,7 +130,7 @@ class _MainShellState extends State<MainShell> {
         padding: const EdgeInsets.symmetric(vertical: 7),
         child: Row(children: [
           _navItem(0, 'Home', Icons.home_outlined, Icons.home_rounded),
-          _navItem(1, 'Match', Icons.favorite_outline_rounded, Icons.favorite_rounded),
+          _navItem(1, 'Videos', Icons.play_circle_outline_rounded, Icons.play_circle_fill_rounded),
           Expanded(child: Center(child: InkWell(
             onTap: openCreate, borderRadius: BorderRadius.circular(9),
             child: Container(width: 46, height: 43,
