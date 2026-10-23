@@ -259,8 +259,7 @@ class _MewvioCreatorPageState extends State<MewvioCreatorPage>
         child: Text(label, style: TextStyle(
           color: mode == which ? Colors.black : Colors.white,
           fontWeight: FontWeight.bold, fontSize: 13))),
-    )),
-  );
+    ));
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -415,7 +414,7 @@ class _CreatorPhotoEditorState extends State<CreatorPhotoEditor> {
                     shadows: [Shadow(color: Colors.black, blurRadius: 5)])))),
             ])),
           ),
-        ))),
+        )),
         const SizedBox(height: 12),
         TextField(
           key: const Key('creator-caption'), maxLength: 100,
