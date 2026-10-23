@@ -21,8 +21,8 @@ for (const name of ['Home', 'Videos', 'Chat', 'Profile']) {
   assert(web.includes("'"+name+"'"), 'Web tab missing: '+name);
 }
 assert(shell.includes("Key('nav-Create')"), 'Android center create tab missing');
-assert(web.includes("class=\\"create-center\\""), 'Web center create tab missing');
-assert(web.includes("data-action=\\"create-menu\\""), 'Web create entrypoint missing');
+assert(web.includes('class="create-center"'), 'Web center create tab missing');
+assert(web.includes('data-action="create-menu"'), 'Web create entrypoint missing');
 assert(home.includes('mewvio-cat.svg'), 'Android official branding missing');
 assert(web.includes('const CAT_LOGO='), 'Web official branding missing');
 assert(web.includes('mew-profile-logo'), 'Web app-style profile missing');
