@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mewvio/main.dart';
+import 'package:mewvio/mewvio_creator_page.dart';
 
 import 'support/fake_accounts.dart';
 
@@ -21,10 +22,12 @@ void main() {
     expect(find.text('Profile'), findsOneWidget);
     await tester.tap(find.byKey(const Key('nav-Create')));
     await tester.pumpAndSettle();
-    expect(find.text('MEWVIO Hub'), findsOneWidget);
-    expect(find.text('Post • Home'), findsOneWidget);
-    expect(find.text('Voice Party demo'), findsOneWidget);
-    Navigator.of(tester.element(find.byType(MainShell))).pop();
+    expect(find.byType(MewvioCreatorPage), findsOneWidget);
+    expect(find.text('PHOTO'), findsOneWidget);
+    expect(find.text('TEXT'), findsOneWidget);
+    expect(find.byKey(const Key('creator-shutter')), findsOneWidget);
+    expect(find.byTooltip('Flip camera'), findsOneWidget);
+    Navigator.of(tester.element(find.byType(MewvioCreatorPage))).pop();
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('nav-Profile')));
     await tester.pumpAndSettle();
