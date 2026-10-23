@@ -70,6 +70,8 @@ void main() {
     expect(find.text('© 2026 MEWVIO Technologies. All rights reserved.'), findsOneWidget);
     await tester.tap(find.text('Edit profile'));
     await tester.pumpAndSettle();
+    expect(find.byKey(const Key('pick-avatar-photo')), findsOneWidget);
+    expect(find.byKey(const Key('pick-cover-photo')), findsOneWidget);
     await tester.enterText(find.byKey(const Key('profile-name')), 'Alice Updated');
     await tester.enterText(find.byKey(const Key('profile-username')), 'Alice_01');
     await tester.enterText(find.byKey(const Key('profile-bio')), 'My new private bio');
