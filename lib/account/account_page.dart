@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'account_repository.dart';
+import '../profile_local_photos.dart';
 
 const _purple = Color(0xFF6941E7);
 
@@ -280,17 +282,51 @@ class _ProfileViewState extends State<_ProfileView> {
   bool _editing = false;
   int _activeTab = 0;
   File? _coverImage;
+  Uint8List? _coverBytes;
+  Uint8List? _avatarBytes;
+  bool _changedImages = false;
   bool _choosingCover = false;
+
+  Future<void> _loadPhotos() async {
+    try {
+      final photos = await ProfileLocalPhotos.load('account_${widget.session.userId}');
+      if (!mounted) return;
+      setState(() {
+        _avatarBytes = photos.avatar;
+        _coverBytes = photos.cover;
+      });
+    } catch (_) {
+      // This account never falls back to photos from a different user.
+    }
+  }
+
+  Future<void> _chooseAvatar() async {
+    if (_busy || _choosingCover) return;
+    try {
+      final bytes = await ProfileLocalPhotos.pick(cover: false);
+      if (bytes != null && mounted) {
+        setState(() {
+          _avatarBytes = bytes;
+          _changedImages = true;
+          _editing = true;
+          _notice = 'Photo selected. Tap Save profile to keep it.';
+        });
+      }
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to choose profile photo: $error')));
+    }
+  }
 
   Future<void> _chooseCover() async {
     if (_choosingCover) return;
     setState(() => _choosingCover = true);
     try {
       final picked = await ImagePicker().pickImage(
-        source: ImageSource.gallery, imageQuality: 80, maxWidth: 1600,
+        source: ImageSource.gallery, imageQuality: 65, maxWidth: 1200, maxHeight: 900,
       );
       if (picked != null && mounted) {
-        setState(() => _coverImage = File(picked.path));
+        setState(() { _coverImage = File(picked.path); _changedImages = true; _editing = true; _notice = 'Cover selected. Tap Save profile to keep it.'; });
       }
     } catch (_) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(
@@ -305,6 +341,7 @@ class _ProfileViewState extends State<_ProfileView> {
   void initState() {
     super.initState();
     _load();
+    _loadPhotos();
   }
 
   @override
@@ -349,6 +386,15 @@ class _ProfileViewState extends State<_ProfileView> {
       if (profile.id != widget.session.userId) {
         throw const AccountFailure('Your session changed. Please sign in again.');
       }
+      if (_changedImages) {
+        final cover = _coverImage == null ? _coverBytes : await _coverImage!.readAsBytes();
+        await ProfileLocalPhotos.save('account_${widget.session.userId}',
+          avatar: _avatarBytes, cover: cover);
+        if (!mounted) return;
+        _coverBytes = cover;
+        _coverImage = null;
+        _changedImages = false;
+      }
       setState(() {
         _profile = profile;
         _name.text = profile.displayName;
@@ -358,6 +404,9 @@ class _ProfileViewState extends State<_ProfileView> {
       });
     } on AccountFailure catch (error) {
       if (mounted) setState(() => _error = error.message);
+    } catch (error) {
+      if (mounted) setState(() =>
+        _error = 'Photo could not be saved locally: $error');
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -465,6 +514,8 @@ class _ProfileViewState extends State<_ProfileView> {
                 if (_coverImage != null)
                   Image.file(_coverImage!, fit: BoxFit.cover, errorBuilder: (_, __, ___) =>
                     const Center(child: Icon(Icons.image_not_supported, color: Colors.white)))
+                else if (_coverBytes != null)
+                  Image.memory(_coverBytes!, fit: BoxFit.cover)
                 else const Center(child: Text('🐱  MEWVIO  💜',
                     style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.w900))),
                 Positioned(bottom: 11, right: 12, child: FilledButton.icon(
@@ -476,13 +527,15 @@ class _ProfileViewState extends State<_ProfileView> {
                 )),
               ])),
             ),
-            const Text('MEWVIO Cover • local preview', textAlign: TextAlign.center,
+            const Text('MEWVIO Cover • private Android photo', textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey, fontSize: 11)),
             Transform.translate(offset: const Offset(0, -16), child: Center(child: Container(
               width: 104, height: 104, padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white,
                   border: Border.all(color: _purple, width: 3)),
-              child: SvgPicture.asset('assets/images/mewvio-cat.svg'),
+              child: _avatarBytes == null
+                ? SvgPicture.asset('assets/images/mewvio-cat.svg')
+                : ClipOval(child: Image.memory(_avatarBytes!, fit: BoxFit.cover)),
             ))),
             const SizedBox(height: 12),
             Text(_profile!.displayName, key: const Key('profile-display-name'),
@@ -517,6 +570,48 @@ class _ProfileViewState extends State<_ProfileView> {
             if (_editing) _Card(child: Form(
               key: _form,
               child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                const Text('Profile and Cover Photos',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                const SizedBox(height: 10),
+                Row(children: [
+                  Expanded(child: ProfilePhotoPreview(
+                    label: 'Profile Photo', bytes: _avatarBytes, cover: false,
+                    disabled: _busy,
+                    onPick: _chooseAvatar,
+                  )),
+                  const SizedBox(width: 12),
+                  Expanded(child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text('Cover Photo',
+                        style: TextStyle(fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 7),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: SizedBox(height: 95,
+                          child: _coverImage != null
+                            ? Image.file(_coverImage!, fit: BoxFit.cover)
+                            : _coverBytes != null
+                              ? Image.memory(_coverBytes!, fit: BoxFit.cover)
+                              : const ColoredBox(color: Color(0xFF33245E),
+                                  child: Icon(Icons.landscape_outlined,
+                                    color: Colors.white, size: 38)))),
+                      ),
+                      const SizedBox(height: 7),
+                      OutlinedButton.icon(
+                        key: const Key('pick-cover-photo'),
+                        onPressed: _busy || _choosingCover ? null : _chooseCover,
+                        icon: const Icon(Icons.photo_library_outlined, size: 17),
+                        label: const Text('Choose cover'),
+                      ),
+                    ],
+                  )),
+                ]),
+                const SizedBox(height: 8),
+                const Text('Gallery photos are stored privately on this device '
+                  'after tapping Save profile. They are not uploaded to Web.',
+                  style: TextStyle(color: Colors.black54, fontSize: 12)),
+                const SizedBox(height: 12),
                 TextFormField(
                   key: const Key('profile-name'),
                   controller: _name, enabled: !_busy,
