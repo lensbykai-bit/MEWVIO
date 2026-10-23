@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'profile_local_photos.dart';
 
 const _background = Color(0xFF0B091A);
 const _surface = Color(0xFF211831);
@@ -19,6 +23,27 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
   String displayName = 'MEWVIO Friend';
   String bio = 'Good people. Good vibes. More friends on MEWVIO 💜';
   int tab = 0;
+  Uint8List? _avatarBytes;
+  Uint8List? _coverBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPhotos();
+  }
+
+  Future<void> _loadPhotos() async {
+    try {
+      final photos = await ProfileLocalPhotos.load('demo');
+      if (mounted) setState(() {
+        _avatarBytes = photos.avatar;
+        _coverBytes = photos.cover;
+      });
+    } catch (_) {
+      // Gallery choices remain usable even if old device storage is unavailable.
+    }
+  }
+
   static const posts = <String>[
     'assets/demo/portrait_sophie.jpg',
     'assets/demo/stars.jpg',
@@ -31,33 +56,120 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
   void editDemo() {
     final name = TextEditingController(text: displayName);
     final about = TextEditingController(text: bio);
+    Uint8List? draftAvatar = _avatarBytes;
+    Uint8List? draftCover = _coverBytes;
+    bool saving = false;
+
     showModalBottomSheet<void>(
-      context: context, isScrollControlled: true, backgroundColor: _surface,
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.fromLTRB(20, 20, 20,
-          MediaQuery.viewInsetsOf(ctx).bottom + 24),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          const Text('Edit demo profile', style: TextStyle(
-            color: Colors.white, fontSize: 21, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 15),
-          TextField(controller: name, maxLength: 60,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(labelText: 'Display name')),
-          TextField(controller: about, maxLength: 140,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(labelText: 'Bio')),
-          const SizedBox(height: 10),
-          FilledButton(onPressed: () {
-            setState(() {
-              if (name.text.trim().isNotEmpty) displayName = name.text.trim();
-              bio = about.text.trim();
-            });
-            Navigator.pop(ctx);
-          }, child: const Text('Save preview')),
-          const SizedBox(height: 8),
-          const Text('Only saved in this demo session.',
-            style: TextStyle(color: Colors.white54, fontSize: 11)),
-        ]),
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      backgroundColor: _surface,
+      builder: (sheet) => StatefulBuilder(
+        builder: (ctx, refresh) => FractionallySizedBox(
+          heightFactor: .86,
+          child: SafeArea(child: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              20, 8, 20, MediaQuery.viewInsetsOf(ctx).bottom + 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text('Edit Profile', style: TextStyle(
+                  color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
+                const SizedBox(height: 8),
+                const Text('Choose profile and cover photos from Gallery.',
+                  style: TextStyle(color: Colors.white70, fontSize: 12)),
+                const SizedBox(height: 17),
+                Row(children: [
+                  Expanded(child: ProfilePhotoPreview(
+                    label: 'Profile Photo', bytes: draftAvatar, cover: false,
+                    disabled: saving,
+                    onPick: () async {
+                      try {
+                        final image = await ProfileLocalPhotos.pick(cover: false);
+                        if (image != null && ctx.mounted) {
+                          refresh(() => draftAvatar = image);
+                        }
+                      } catch (error) {
+                        if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(
+                          SnackBar(content: Text('Cannot choose photo: $error')));
+                      }
+                    },
+                  )),
+                  const SizedBox(width: 13),
+                  Expanded(child: ProfilePhotoPreview(
+                    label: 'Cover Photo', bytes: draftCover, cover: true,
+                    disabled: saving,
+                    onPick: () async {
+                      try {
+                        final image = await ProfileLocalPhotos.pick(cover: true);
+                        if (image != null && ctx.mounted) {
+                          refresh(() => draftCover = image);
+                        }
+                      } catch (error) {
+                        if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(
+                          SnackBar(content: Text('Cannot choose cover: $error')));
+                      }
+                    },
+                  )),
+                ]),
+                const SizedBox(height: 14),
+                TextField(
+                  key: const Key('demo-profile-name'),
+                  controller: name, maxLength: 60, enabled: !saving,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(labelText: 'Display name'),
+                ),
+                TextField(
+                  key: const Key('demo-profile-bio'),
+                  controller: about, maxLength: 140,
+                  maxLines: 2, enabled: !saving,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(labelText: 'Bio'),
+                ),
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  key: const Key('save-demo-profile'),
+                  onPressed: saving ? null : () async {
+                    if (name.text.trim().isEmpty) {
+                      ScaffoldMessenger.of(ctx).showSnackBar(
+                        const SnackBar(content: Text('Enter a display name.')));
+                      return;
+                    }
+                    refresh(() => saving = true);
+                    try {
+                      await ProfileLocalPhotos.save('demo',
+                        avatar: draftAvatar, cover: draftCover);
+                      if (!ctx.mounted) return;
+                      setState(() {
+                        displayName = name.text.trim();
+                        bio = about.text.trim();
+                        _avatarBytes = draftAvatar;
+                        _coverBytes = draftCover;
+                      });
+                      Navigator.of(ctx).pop();
+                    } catch (error) {
+                      if (ctx.mounted) {
+                        refresh(() => saving = false);
+                        ScaffoldMessenger.of(ctx).showSnackBar(
+                          SnackBar(content: Text('Unable to save photos: $error')));
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.save_outlined),
+                  label: Text(saving ? 'Saving…' : 'Save profile'),
+                  style: FilledButton.styleFrom(backgroundColor: _pink),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Photos are saved privately on this Android device, '
+                  'not uploaded to MEWVIO or synchronized to Web.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white60, fontSize: 11)),
+              ],
+            ),
+          )),
+        ),
       ),
     ).whenComplete(() { name.dispose(); about.dispose(); });
   }
@@ -106,9 +218,12 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
             const DecoratedBox(decoration: BoxDecoration(gradient: LinearGradient(
               colors: [Color(0xFF371F7E), Color(0xFFB953A8), Color(0xFFED8B9A)],
               begin: Alignment.topLeft, end: Alignment.bottomRight))),
-            Image.asset(
-              'assets/demo/hero_sunset.jpg',
-              fit: BoxFit.cover, errorBuilder: (_, __, ___) => const SizedBox.shrink()),
+            if (_coverBytes != null)
+              Image.memory(_coverBytes!, fit: BoxFit.cover)
+            else
+              Image.asset('assets/demo/hero_sunset.jpg',
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const SizedBox.shrink()),
             const DecoratedBox(decoration: BoxDecoration(gradient: LinearGradient(
               begin: Alignment.topCenter, end: Alignment.bottomCenter,
               colors: [Color(0x92000000), Colors.transparent, Color(0xA9000019)]))),
@@ -126,7 +241,9 @@ class _MewvioDemoProfilePageState extends State<MewvioDemoProfilePage> {
           decoration: BoxDecoration(color: const Color(0xFF15122D),
             shape: BoxShape.circle, border: Border.all(color: _pink, width: 3),
             boxShadow: const [BoxShadow(color: Color(0xAAE843AF), blurRadius: 15)]),
-          child: SvgPicture.asset('assets/images/mewvio-cat.svg'),
+          child: _avatarBytes != null
+              ? ClipOval(child: Image.memory(_avatarBytes!, fit: BoxFit.cover))
+              : SvgPicture.asset('assets/images/mewvio-cat.svg'),
         )),
       ]),
       Padding(padding: const EdgeInsets.fromLTRB(16, 46, 16, 0),
