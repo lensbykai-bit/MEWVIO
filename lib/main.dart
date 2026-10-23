@@ -4,8 +4,6 @@ import 'account/account_page.dart';
 import 'account/account_repository.dart';
 import 'tiktok_video_page.dart';
 import 'social_home_page.dart';
-import 'mewvio_shop_page.dart';
-import 'mewvio_wallet_page.dart';
 import 'mewvio_demo_profile_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
@@ -78,18 +76,11 @@ class _MainShellState extends State<MainShell> {
             Navigator.pop(ctx);
             setState(() => extraPage = 1);
           }, icon: const Icon(Icons.mic_rounded), label: const Text('Voice Party demo')),
-          OutlinedButton.icon(onPressed: () {
-            Navigator.pop(ctx);
-            setState(() => extraPage = 2);
-          }, icon: const Icon(Icons.shopping_bag_outlined), label: const Text('Shop preview')),
         ]),
-        OutlinedButton.icon(onPressed: () { Navigator.pop(ctx); openWallet(); }, icon: const Icon(Icons.account_balance_wallet_outlined), label: const Text('MEWVIO Wallet')),
         TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close')),
       ]),
     )),
   );
-
-  void openWallet() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const MewvioWalletPage()));
 
   void chooseTab(int index) {
     if (index == 2) { openCreate(); return; }
@@ -120,7 +111,6 @@ class _MainShellState extends State<MainShell> {
           : AccountPage(repository: widget.accounts),
     ];
     final body = extraPage == 1 ? const PartyPage()
-        : extraPage == 2 ? const MewvioShopPage()
         : extraPage == 3 ? const MatchPage() : pages[selected];
     return Scaffold(
       backgroundColor: darkScreen && extraPage == null ? Colors.black : pale,
