@@ -47,3 +47,11 @@ Removed all MEWVIO Wallet and demo diamond-shop navigation from Android guest pr
 ## MEWVIO Social Android & Web 0.5.3
 
 Unified **© 2026 MEWVIO Technologies. All rights reserved.** across the Android guest profile, the signed-in profile, the Social web profile and site footer, and the preserved landing page. Removed residual Wallet wording from the web Live preview. Tests now check that the Android copyright notice appears for both guest and signed-in profiles. The notice is for MEWVIO's original app/site material, not automatically for third-party sample media. APK CI artifact: `MEWVIO-Social-v0.5.3-App-Web-APK`.
+
+## MEWVIO Social unified App & Web beta 0.6.0
+
+The Android and responsive website now share the same official kitten SVG, dark navy / cyan / purple / pink visual language, main five-tab mobile navigation (**Home / Videos / + / Chat / Profile**), creator entrypoints, wallet-free profile presentation and copyright notice. The web mobile profile now follows the Flutter guest profile layout, using the same sample Unsplash image references, stats and Posts / Likes / Saved tabs. The web profile's edit preview saves only for the current browser session; neither site nor app demo social content is globally synchronized.
+
+The native Flutter account registration/private profile functions still use Supabase; the static GitHub Pages web preview does **not** provide equivalent login or realtime social networking. Matching the visual UI does not imply backend parity, paid gifting, functional live voice, real uploads, public messaging, or unified accounts. Never display sample people/posts as real users. Implement age-appropriate safety, reporting and moderation before enabling user-generated content.
+
+Android version: `0.6.0+22`. CI APK artifact: `MEWVIO-Social-v0.6.0-Unified-App-Web-APK`. Web deployments run `scripts/check_web_parity.js` before publishing.
