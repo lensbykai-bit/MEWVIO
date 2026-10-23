@@ -7,7 +7,7 @@ text = path.read_text()
 needed = [
     '<uses-permission android:name="android.permission.CAMERA" />',
     '<uses-permission android:name="android.permission.RECORD_AUDIO" />',
-    '<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />',
+    '<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />',
 ]
 for line in needed:
     permission = line.split('android:name="')[1].split('"')[0]
