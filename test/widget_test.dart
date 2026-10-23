@@ -21,6 +21,7 @@ void main() {
     await tester.tap(find.byKey(const Key('nav-Profile')));
     await tester.pumpAndSettle();
     expect(find.text('MEWVIO Friend'), findsOneWidget);
+    expect(find.text('© 2026 MEWVIO Technologies. All rights reserved.'), findsOneWidget);
     expect(find.text('MEWVIO Wallet'), findsNothing);
     expect(find.byTooltip('MEWVIO Wallet'), findsNothing);
     await tester.tap(find.byTooltip('MEWVIO menu'));
