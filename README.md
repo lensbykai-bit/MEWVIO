@@ -43,3 +43,7 @@ The repository homepage `index.html` is now the responsive MEWVIO Social web fro
 ## MEWVIO Social Android 0.5.1
 
 Removed all MEWVIO Wallet and demo diamond-shop navigation from Android guest profile, signed-in account menu, and the global create menu. The profile now displays Posts / Likes / Saved below interest chips without the wallet card. The inactive wallet/shop Dart files remain in the repository only for version history and are no longer imported by the running app. CI builds `MEWVIO-Social-v0.5.1-No-Wallet-APK`. No backend financial service is available.
+
+## MEWVIO Social Android & Web 0.5.3
+
+Unified **© 2026 MEWVIO Technologies. All rights reserved.** across the Android guest profile, the signed-in profile, the Social web profile and site footer, and the preserved landing page. Removed residual Wallet wording from the web Live preview. Tests now check that the Android copyright notice appears for both guest and signed-in profiles. The notice is for MEWVIO's original app/site material, not automatically for third-party sample media. APK CI artifact: `MEWVIO-Social-v0.5.3-App-Web-APK`.
