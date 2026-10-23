@@ -30,3 +30,12 @@ New accounts must confirm their email when confirmation is enabled. Open the ema
 ## Safety
 
 Before any public social launch, implement age-appropriate policies, abuse reporting, blocking, moderation and content review. Company data stays behind the private admin's independent access controls.
+
+
+## MEWVIO Social Web (beta)
+
+The repository homepage `index.html` is now the responsive MEWVIO Social web frontend. The previous promotional website remains available as `landing.html`.
+
+**Online deployment:** `.github/workflows/pages.yml` deploys the static site from the default branch to GitHub Pages. In the repository, set **Settings → Pages → Build and deployment → Source: GitHub Actions** to enable it if not already enabled. The standard Pages address, after successful deployment, is `https://lensbykai-bit.github.io/MEWVIO/`. Confirm deployment status in the Actions tab; committing HTML alone does not guarantee a published website.
+
+**Limits:** This website is a public frontend beta, not a production social network. Posts, chat messages, likes and follows are demos/browser-local; there is no real user sync, auth, media hosting, live voice or moderation backend wired into this web page. The Flutter Android prototype's private Supabase profiles are separate and must not be exposed. Implement privacy controls, blocking/reporting, moderation and production-grade authorization before inviting real users.
