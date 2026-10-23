@@ -595,7 +595,7 @@ class _ProfileViewState extends State<_ProfileView> {
                               ? Image.memory(_coverBytes!, fit: BoxFit.cover)
                               : const ColoredBox(color: Color(0xFF33245E),
                                   child: Icon(Icons.landscape_outlined,
-                                    color: Colors.white, size: 38)))),
+                                    color: Colors.white, size: 38))),
                       ),
                       const SizedBox(height: 7),
                       OutlinedButton.icon(
