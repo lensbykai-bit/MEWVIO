@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'account_repository.dart';
-import '../mewvio_wallet_page.dart';
 
 const _purple = Color(0xFF6941E7);
 
@@ -388,17 +387,6 @@ class _ProfileViewState extends State<_ProfileView> {
           const SizedBox(height: 4),
           const Text('Your creative corner', style: TextStyle(color: Colors.white60)),
           const SizedBox(height: 18),
-          ListTile(
-            leading: const Icon(Icons.account_balance_wallet_outlined, color: Color(0xFFF15CBF)),
-            title: const Text('MEWVIO Wallet', style: TextStyle(color: Colors.white)),
-            subtitle: const Text('Coin packs • Preview', style: TextStyle(color: Colors.white54)),
-            trailing: const Icon(Icons.chevron_right, color: Colors.white70),
-            onTap: () {
-              Navigator.pop(sheet);
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (_) => const MewvioWalletPage()));
-            },
-          ),
           ListTile(
             leading: const Icon(Icons.auto_awesome_rounded, color: Color(0xFF7FDDF9)),
             title: const Text('Creator Studio', style: TextStyle(color: Colors.white)),
