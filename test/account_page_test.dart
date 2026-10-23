@@ -49,6 +49,15 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets('signed-in account menu has no wallet', (tester) async {
+    final accounts = FakeAccounts()..changeUser('alice');
+    await showAccount(tester, accounts);
+    await tester.tap(find.byTooltip('Settings and privacy'));
+    await tester.pumpAndSettle();
+    expect(find.text('MEWVIO Wallet'), findsNothing);
+    expect(find.text('Creator Studio'), findsOneWidget);
+  });
+
   testWidgets('sign in loads profile, saves edits, and sign out clears it', (tester) async {
     final accounts = FakeAccounts();
     await showAccount(tester, accounts);
