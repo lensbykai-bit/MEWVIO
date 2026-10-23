@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+      - name: Validate Android and web parity
+        run: node scripts/check_web_parity.js
       - name: Set up GitHub Pages
         uses: actions/configure-pages@v5
       - name: Prepare static website
