@@ -130,6 +130,7 @@ class _MainShellState extends State<MainShell> {
           _navItem(0, 'Home', Icons.home_outlined, Icons.home_rounded),
           _navItem(1, 'Videos', Icons.play_circle_outline_rounded, Icons.play_circle_fill_rounded),
           Expanded(child: Center(child: InkWell(
+            key: const Key('nav-Create'),
             onTap: openCreate, borderRadius: BorderRadius.circular(9),
             child: Container(width: 46, height: 43,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(24),
