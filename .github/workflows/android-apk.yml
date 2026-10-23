@@ -96,7 +96,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: MEWVIO-Social-v0.6.0-Unified-App-Web-APK
+          name: MEWVIO-Social-v0.6.1-Unified-App-Web-APK
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 30
