@@ -8,6 +8,7 @@ import 'package:gal/gal.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_trimmer/video_trimmer.dart';
+import 'creator/mewvio_photo_edit_page.dart';
 
 const pink = Color(0xFFF25CBB);
 const cyan = Color(0xFF4DDBF5);
@@ -202,7 +203,7 @@ class _MewvioCreatorPageState extends State<MewvioCreatorPage>
 
   Future<void> pictureEditor(File? photo) async {
     await Navigator.push(context, MaterialPageRoute<void>(
-      builder: (_) => CreatorPhotoEditor(photo: photo)));
+      builder: (_) => MewvioPhotoEditPage(photo: photo)));
   }
   Future<void> videoEditor(File video) async {
     await Navigator.push(context, MaterialPageRoute<void>(
@@ -352,85 +353,6 @@ class _MewvioCreatorPageState extends State<MewvioCreatorPage>
           Text('LIVE • soon', style: TextStyle(color: Colors.white38)),
         ])),
     ])),
-  );
-}
-
-class CreatorPhotoEditor extends StatefulWidget {
-  const CreatorPhotoEditor({super.key, this.photo});
-  final File? photo;
-  @override
-  State<CreatorPhotoEditor> createState() => _CreatorPhotoEditorState();
-}
-
-class _CreatorPhotoEditorState extends State<CreatorPhotoEditor> {
-  final GlobalKey boundaryKey = GlobalKey();
-  final TextEditingController text = TextEditingController();
-  bool saving = false;
-  @override
-  void dispose() { text.dispose(); super.dispose(); }
-
-  Future<void> export() async {
-    if (saving) return;
-    setState(() => saving = true);
-    try {
-      final boundary = boundaryKey.currentContext!.findRenderObject()
-          as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 2);
-      final data = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (data == null) throw StateError('Image rendering failed');
-      final dir = await getTemporaryDirectory();
-      final file = File(dir.path + '/mewvio-photo-' +
-        DateTime.now().millisecondsSinceEpoch.toString() + '.png');
-      await file.writeAsBytes(data.buffer.asUint8List());
-      await Gal.putImage(file.path);
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Saved image to Gallery.')));
-    } catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Cannot save image: ' + e.toString())));
-    } finally {
-      if (mounted) setState(() => saving = false);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: dark,
-    appBar: AppBar(backgroundColor: dark, foregroundColor: Colors.white,
-      title: Text(widget.photo == null ? 'Text Story' : 'Edit Photo')),
-    body: SafeArea(child: Padding(padding: const EdgeInsets.all(15),
-      child: Column(children: [
-        Expanded(child: Center(child: AspectRatio(aspectRatio: 9 / 16,
-          child: RepaintBoundary(key: boundaryKey, child: Stack(
-            fit: StackFit.expand, children: [
-              if (widget.photo != null) Image.file(widget.photo!, fit: BoxFit.cover)
-              else const DecoratedBox(decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  Color(0xFF252466), Color(0xFF9D3A99), Color(0xFF17192F)]))),
-              Center(child: Padding(padding: const EdgeInsets.all(14),
-                child: Text(text.text, textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white,
-                    fontSize: 26, fontWeight: FontWeight.w900,
-                    shadows: [Shadow(color: Colors.black, blurRadius: 5)])))),
-            ])),
-          ),
-        )),
-        const SizedBox(height: 12),
-        TextField(
-          key: const Key('creator-caption'), maxLength: 100,
-          controller: text, onChanged: (_) => setState(() {}),
-          style: const TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            hintText: 'Add text', hintStyle: const TextStyle(color: Colors.white54),
-            filled: true, fillColor: const Color(0xFF2A2339),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)))),
-        SizedBox(width: double.infinity, child: FilledButton.icon(
-          key: const Key('creator-export-photo'),
-          onPressed: saving ? null : export,
-          icon: const Icon(Icons.save_alt),
-          label: Text(saving ? 'Saving…' : 'Save photo to Gallery'),
-          style: FilledButton.styleFrom(backgroundColor: pink))),
-      ]))),
   );
 }
 
