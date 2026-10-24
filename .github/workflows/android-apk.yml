@@ -99,7 +99,7 @@ jobs:
       - name: Upload APK for download
         uses: actions/upload-artifact@v4
         with:
-          name: MEWVIO-Social-v0.7.0-Camera-Creator-APK
+          name: MEWVIO-Social-v0.8.0-Posts-Chat-Beta-APK
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 30
