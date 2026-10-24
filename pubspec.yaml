@@ -1,7 +1,7 @@
 name: mewvio
 description: MEWVIO Social - videos, communities, chats and voice rooms (beta)
 publish_to: none
-version: 0.7.0+25
+version: 0.8.0+26
 
 environment:
   sdk: '>=3.12.0 <4.0.0'
