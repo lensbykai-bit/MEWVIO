@@ -5,6 +5,7 @@ import 'account/account_repository.dart';
 import 'tiktok_video_page.dart';
 import 'social_home_page.dart';
 import 'mewvio_creator_page.dart';
+import 'social/mewvio_community_page.dart';
 import 'mewvio_demo_profile_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
@@ -65,6 +66,11 @@ class _MainShellState extends State<MainShell> {
       builder: (_) => const MewvioCreatorPage()));
   }
 
+  void openCommunity({int tab = 0}) {
+    Navigator.push(context, MaterialPageRoute<void>(
+      builder: (_) => MewvioCommunityPage(initialTab: tab)));
+  }
+
   void chooseTab(int index) {
     if (index == 2) { openCreate(); return; }
     setState(() { selected = index; extraPage = null; });
@@ -78,12 +84,12 @@ class _MainShellState extends State<MainShell> {
         onVideos: () => chooseTab(1),
         onMatch: () => setState(() => extraPage = 3),
         onVoice: () => setState(() => extraPage = 1),
-        onChat: () => chooseTab(3),
-        onCreate: openCreate,
+        onChat: () => openCommunity(tab: 2),
+        onCreate: () => openCommunity(),
       ),
       const TikTokVideosPage(),
       const SizedBox.shrink(),
-      const ChatPage(),
+      const MewvioCommunityPage(initialTab: 2),
       widget.accounts.currentSession == null
           ? MewvioDemoProfilePage(onSignIn: () => Navigator.push(context,
               MaterialPageRoute<void>(builder: (_) => Scaffold(
