@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:gal/gal.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 import 'creator/mewvio_photo_edit_page.dart';
 
@@ -408,46 +405,86 @@ class _CreatorVideoEditorState extends State<CreatorVideoEditor> {
     }
   }
 
+  Widget _editFeature(IconData icon,String label,{bool enabled=false}) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal:9),
+    child: Column(mainAxisSize:MainAxisSize.min, children: [
+      Container(width:49,height:49,decoration:BoxDecoration(
+        color:enabled?const Color(0xFF433365):const Color(0xFF262035),
+        borderRadius:BorderRadius.circular(14)),
+        child:Icon(icon,color:enabled?Colors.white:Colors.white38)),
+      const SizedBox(height:5),
+      Text(label,style:TextStyle(
+        color:enabled?Colors.white:Colors.white38,fontSize:11)),
+    ]),
+  );
+
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: dark,
     appBar: AppBar(backgroundColor: dark,
-      foregroundColor: Colors.white, title: const Text('Edit Video • MP4')),
+      foregroundColor: Colors.white,
+      title: const Text('MEWVIO • Edit Video'),
+      actions: [Padding(padding:const EdgeInsets.only(right:12),
+        child:Center(child:Text('MP4',style:TextStyle(
+          color:cyan,fontWeight:FontWeight.bold))))]),
     body: SafeArea(child: loading ?
       const Center(child: CircularProgressIndicator(color: pink)) :
       Column(children: [
-        Expanded(child: VideoViewer(trimmer: trimmer)),
-        const SizedBox(height: 10),
-        const Text('Drag the handles to trim and save a new MP4.',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white70, fontSize: 12)),
-        const SizedBox(height: 9),
-        TrimViewer(trimmer: trimmer, viewerHeight: 55,
-          viewerWidth: MediaQuery.sizeOf(context).width - 20,
-          maxVideoLength: const Duration(minutes: 10),
-          onChangeStart: (value) => start = value,
-          onChangeEnd: (value) => end = value,
-          onChangePlaybackState: (value) =>
-            setState(() => playing = value)),
-        IconButton(onPressed: () async {
-          final state = await trimmer.videoPlaybackControl(
-            startValue: start, endValue: end);
-          if (mounted) setState(() => playing = state);
-        }, icon: Icon(playing ? Icons.pause_circle_filled :
-          Icons.play_circle_fill, color: Colors.white, size: 43)),
-        Wrap(alignment: WrapAlignment.center, spacing: 10, children: [
-          OutlinedButton.icon(
-            onPressed: saving ? null : () => export(trimmed: false),
-            icon: const Icon(Icons.save_alt), label: const Text('Save original')),
-          FilledButton.icon(
-            key: const Key('creator-trim-export'),
-            onPressed: saving ? null : () => export(trimmed: true),
-            style: FilledButton.styleFrom(backgroundColor: pink),
-            icon: const Icon(Icons.content_cut), label: const Text('Trim & Save')),
+        Expanded(child: Stack(children: [
+          Positioned.fill(child:VideoViewer(trimmer: trimmer)),
+          const Positioned(left:12,top:9,child:Chip(
+            backgroundColor:Color(0xB0302042),
+            label:Text('MEWVIO Preview',style:TextStyle(
+              color:Colors.white,fontSize:11)))),
+        ])),
+        Padding(padding:const EdgeInsets.symmetric(vertical:9),
+          child:SingleChildScrollView(scrollDirection:Axis.horizontal,
+            child:Row(children:[
+              _editFeature(Icons.content_cut_rounded,'Trim',enabled:true),
+              _editFeature(Icons.music_note_rounded,'Music · soon'),
+              _editFeature(Icons.text_fields_rounded,'Text · soon'),
+              _editFeature(Icons.auto_awesome_rounded,'Effects · soon'),
+              _editFeature(Icons.speed_rounded,'Speed · soon'),
+            ]))),
+        const Text('Drag the two handles to select your video segment.',
+          style: TextStyle(color: Colors.white70,fontSize:12),
+          textAlign:TextAlign.center),
+        const SizedBox(height:8),
+        TrimViewer(trimmer:trimmer,viewerHeight:62,
+          viewerWidth:MediaQuery.sizeOf(context).width-20,
+          maxVideoLength:const Duration(minutes:10),
+          onChangeStart:(value)=>start=value,
+          onChangeEnd:(value)=>end=value,
+          onChangePlaybackState:(value)=>setState(()=>playing=value)),
+        Row(mainAxisAlignment:MainAxisAlignment.center,children:[
+          IconButton(
+            key:const Key('video-editor-play'),
+            onPressed:()async{
+              final state=await trimmer.videoPlaybackControl(
+                startValue:start,endValue:end);
+              if(mounted)setState(()=>playing=state);
+            },
+            icon:Icon(playing?Icons.pause_circle_filled:Icons.play_circle_fill,
+              size:44,color:Colors.white)),
+          Text('${(start/1000).toStringAsFixed(1)}s – ${(end/1000).toStringAsFixed(1)}s',
+            style:const TextStyle(color:Colors.white70,fontSize:12)),
         ]),
-        if (saving) const Padding(padding: EdgeInsets.all(10),
-          child: LinearProgressIndicator(color: cyan)),
-        const SizedBox(height: 16),
+        Padding(padding:const EdgeInsets.symmetric(horizontal:12),
+          child:Row(children:[
+            Expanded(child:OutlinedButton.icon(
+              onPressed:saving?null:()=>export(trimmed:false),
+              icon:const Icon(Icons.save_alt),label:const Text('Save original'))),
+            const SizedBox(width:10),
+            Expanded(child:FilledButton.icon(
+              key:const Key('creator-trim-export'),
+              onPressed:saving?null:()=>export(trimmed:true),
+              style:FilledButton.styleFrom(backgroundColor:pink),
+              icon:const Icon(Icons.content_cut),label:const Text('Trim & Save'))),
+          ])),
+        ),
+        if(saving)const Padding(padding:EdgeInsets.all(10),
+          child:LinearProgressIndicator(color:cyan)),
+        const SizedBox(height:13),
       ])),
   );
 }
