@@ -43,14 +43,14 @@ class _MewvioPhotoEditPageState extends State<MewvioPhotoEditPage> {
   void toast(String s){if(mounted)ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(s)));}
 
   Future<void> addText() async {
-    final ctl=TextEditingController();
+    String draft = '';
     final value=await showDialog<String>(context:context,builder:(ctx)=>AlertDialog(
       title:const Text('Add text'),content:TextField(
-        key:const Key('photo-edit-text-input'),controller:ctl,
+        key:const Key('photo-edit-text-input'),
+        onChanged:(v)=>draft=v,
         maxLength:100,maxLines:3,decoration:const InputDecoration(hintText:'Write on your photo')),
       actions:[TextButton(onPressed:()=>Navigator.pop(ctx),child:const Text('Cancel')),
-        FilledButton(onPressed:()=>Navigator.pop(ctx,ctl.text.trim()),child:const Text('Add'))]));
-    ctl.dispose();
+        FilledButton(onPressed:()=>Navigator.pop(ctx,draft.trim()),child:const Text('Add'))]));
     if(value!=null && value.isNotEmpty && mounted)setState((){
       layers.add(EditLayer(value,color:textColor));selected=layers.length-1;});
   }
