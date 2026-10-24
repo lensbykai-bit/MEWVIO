@@ -481,7 +481,6 @@ class _CreatorVideoEditorState extends State<CreatorVideoEditor> {
               style:FilledButton.styleFrom(backgroundColor:pink),
               icon:const Icon(Icons.content_cut),label:const Text('Trim & Save'))),
           ])),
-        ),
         if(saving)const Padding(padding:EdgeInsets.all(10),
           child:LinearProgressIndicator(color:cyan)),
         const SizedBox(height:13),
